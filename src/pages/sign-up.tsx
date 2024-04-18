@@ -14,7 +14,12 @@ export function SignUp() {
   async function handleSignUp(e: any) {
     e.preventDefault();
     try {
-      await api.post("/newuser", { name, email, password, confirmPassword });
+      await api.post("/users/newuser", {
+        name,
+        email,
+        password,
+        confirmPassword,
+      });
       toast.success("Usuário registrado com sucesso.");
       navigate(-1);
     } catch (err: any) {

@@ -27,9 +27,7 @@ function MoviesProvider({ children }: MoviesProviderProps) {
 
   async function getAllMovies() {
     try {
-      console.log("Fetching all movies...");
       const res = await api.get("/movielist");
-      console.log("Fetched all movies successfully:", res.data);
       setMovies(res.data);
     } catch (error) {
       console.error("Error fetching movies:", error);
@@ -38,9 +36,8 @@ function MoviesProvider({ children }: MoviesProviderProps) {
 
   async function searchMovies(searchText: string) {
     try {
-      console.log("Searching for movies with text:", searchText);
       const res = await api.get(`/movielist?searchText=${searchText}`);
-      console.log("Search results:", res.data);
+
       setMovieSought(res.data);
     } catch (error) {
       console.error("Error searching movies:", error);
@@ -48,7 +45,6 @@ function MoviesProvider({ children }: MoviesProviderProps) {
   }
 
   useEffect(() => {
-    console.log("Component mounted, fetching all movies...");
     getAllMovies();
   }, []);
 

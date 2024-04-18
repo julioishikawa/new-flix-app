@@ -21,7 +21,7 @@ interface CategoryProps {
 export function MovieCategory({ title, movies }: CategoryProps) {
   return (
     <div>
-      <h2>{title}</h2>
+      <h2 className="text-white">{title}</h2>
 
       <Swiper
         slidesPerView="auto"

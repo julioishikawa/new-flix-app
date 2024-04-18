@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { api } from "../services/api";
 
 interface Movie {
   id: string;
@@ -14,8 +15,9 @@ interface MovieCardProps {
 }
 
 export default function MovieCard({ movie }: MovieCardProps) {
-  const navigate = useNavigate();
   const [showDescription, setShowDescription] = useState(false);
+
+  const image = `${api.defaults.baseURL}/movielist/${movie.id}/image`;
 
   return (
     <div
@@ -23,20 +25,12 @@ export default function MovieCard({ movie }: MovieCardProps) {
       onMouseEnter={() => setShowDescription(true)}
       onMouseLeave={() => setShowDescription(false)}
     >
-      <div className="tools">
-        <div
-          className=""
-          role="button"
-          onClick={() => navigate(`/editmovie/${movie.id}`)}
-        />
-      </div>
-
       <div>
         <Link to={`/movielist/${movie.id}`}>
-          <img src={movie.image} alt={movie.title} />
-          <h2>{`${movie.title} >`}</h2>
+          <img src={image} alt={movie.title} className="w-20 h-20" />
+          <h2 className="text-white">{`${movie.title}`}</h2>
         </Link>
-        {showDescription && <p className="description">{movie.description}</p>}
+        {showDescription && <p className="text-white">{movie.description}</p>}
       </div>
     </div>
   );

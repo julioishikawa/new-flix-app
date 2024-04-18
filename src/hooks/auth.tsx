@@ -77,12 +77,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (tokenCookie) {
       // Obter o valor do token do cookie
       const token = tokenCookie.split("=")[1];
-      console.log(token);
 
       // Decodificar o token JWT para extrair informações do usuário
       try {
         const decodedToken = jwtDecode<JwtPayload>(token);
-        console.log(decodedToken);
         setData({
           user: null, // Por enquanto, definimos como null, pois estamos apenas decodificando o token
           token,
