@@ -36,11 +36,17 @@ function MoviesProvider({ children }: MoviesProviderProps) {
 
   async function searchMovies(searchText: string) {
     try {
-      const res = await api.get(`/movielist?searchText=${searchText}`);
-
-      setMovieSought(res.data);
+      if (searchText.trim() !== "") {
+        // Realiza a busca somente se houver texto na busca
+        const res = await api.get(`/movielist?searchText=${searchText}`);
+        setMovieSought(res.data);
+      } else {
+        // Se a busca estiver vazia, limpa os resultados
+        setMovieSought([]);
+      }
     } catch (error) {
       console.error("Error searching movies:", error);
+      // Trate o erro conforme necessário
     }
   }
 

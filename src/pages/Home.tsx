@@ -9,6 +9,9 @@ interface Movie {
   title: string;
   gender: string;
   description: string;
+  content: {
+    URL: string;
+  };
 }
 
 export function Home() {
@@ -42,24 +45,13 @@ export function Home() {
     <div className="bg-black h-screen">
       <Header />
 
-      <div className="banner">
-        <div className="infos">
-          <h2>Sabores inigualáveis</h2>
-          <p>Sinta o cuidado do preparo com ingredientes selecionados.</p>
-        </div>
-      </div>
-
-      <div className="movielist">
+      <div className="p-10">
         {actionMovies.length > 0 && (
           <MovieCategory title="action" movies={actionMovies} />
         )}
-      </div>
-      <div className="movielist">
         {comedyMovies.length > 0 && (
           <MovieCategory title="comedy" movies={comedyMovies} />
         )}
-      </div>
-      <div className="movielist">
         {dramaMovies.length > 0 && (
           <MovieCategory title="drama" movies={dramaMovies} />
         )}

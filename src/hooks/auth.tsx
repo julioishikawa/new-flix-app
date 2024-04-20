@@ -53,16 +53,24 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       // Atualizando o estado com os dados de autenticação
       setData({ user: { email, password }, token, isAdmin: res.data.isAdmin });
       toast.success("Login feito com sucesso.");
-    } catch (error) {
+    } catch (error: any) {
       console.error("Erro ao fazer login:", error);
-      toast.error("Não foi possível entrar.");
+      if (error.response && error.response.data && error.response.data.error) {
+        // Se houver uma mensagem de erro na resposta, exiba-a
+        toast.error(error.response.data.error);
+      } else {
+        // Caso contrário, exiba uma mensagem de erro genérica
+        toast.error(
+          "Erro ao fazer login. Por favor, tente novamente mais tarde."
+        );
+      }
       throw error;
     }
   }
 
   // Função de logout
   function signOut() {
-    document.cookie = "token=";
+    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"; // essa linha apaga o cookie
 
     setData({ user: null, token: null, isAdmin: false });
   }

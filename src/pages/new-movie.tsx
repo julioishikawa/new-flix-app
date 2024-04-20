@@ -1,8 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "../services/api";
+import { toast } from "sonner";
+import { useMovies } from "../hooks/movies";
 
 export function NewMovie() {
+  const { getAllMovies } = useMovies();
+
   const navigate = useNavigate();
 
   const [title, setTitle] = useState("");
@@ -16,7 +20,7 @@ export function NewMovie() {
     if (image) {
       formData.append("image", image);
     }
-    console.log("Image FormData:", formData);
+
     return formData;
   }
 
@@ -29,11 +33,7 @@ export function NewMovie() {
         content: { URL: contentURL },
       };
 
-      console.log("Movie Data:", movieData);
-
       const { data } = await api.post("/movielist/newmovie", movieData);
-
-      console.log("Response Data:", data);
 
       if (image) {
         const imageFormData = handleImage();
@@ -41,12 +41,13 @@ export function NewMovie() {
       }
 
       navigate("/");
-      alert("Filme criado com sucesso!");
+      toast.success("Filme criado com sucesso!");
+      getAllMovies();
     } catch (error: any) {
       if (error.response) {
-        alert(error.response.data.error);
+        toast.error(error.response.data.error);
       } else {
-        alert("Não foi possível criar o filme.");
+        toast.error("Não foi possível criar o filme.");
       }
     }
   }
