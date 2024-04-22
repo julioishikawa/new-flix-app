@@ -26,9 +26,9 @@ export function Header() {
   };
 
   return (
-    <div className="flex items-center justify-between px-5 py-3 bg-slate-900">
+    <div className="flex items-center justify-between gap-4 px-10 py-3 bg-slate-900">
       <h1 className="text-white">ICONE</h1>
-      <div className="relative flex items-center gap-2 border-2 rounded border-gray-500 p-1">
+      <div className="w-1/3 relative flex items-center gap-2 border-2 rounded border-gray-500 p-1">
         <span>
           <SearchIcon className="h-5 w-5 text-gray-500" />
         </span>

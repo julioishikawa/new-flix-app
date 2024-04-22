@@ -1,6 +1,5 @@
-// Importações necessárias
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { api } from "../services/api"; // Importamos a instância do axios para fazer solicitações HTTP
+import { api } from "../services/api";
 import { toast } from "sonner";
 import { jwtDecode } from "jwt-decode";
 
@@ -9,6 +8,7 @@ interface UserData {
   user: User | null;
   token: string | null;
   isAdmin: boolean;
+  hasSubscription: boolean; // Inicialize hasSubscription como false
 }
 
 interface User {
@@ -19,26 +19,25 @@ interface User {
 interface JwtPayload {
   userId: string;
   isAdmin: boolean;
+  hasSubscription: boolean; // Adicione hasSubscription à interface JwtPayload
   // Outras propriedades do token JWT, se houver
 }
 
 interface AuthContextType extends UserData {
-  signIn: (credentials: { email: string; password: string }) => Promise<void>; // Alteramos o tipo de retorno de signIn
+  signIn: (credentials: { email: string; password: string }) => Promise<void>;
   signOut: () => void;
 }
 
-// Criação do contexto de autenticação
 export const AuthContext = createContext({} as AuthContextType);
 
-// Componente do provedor de autenticação
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [data, setData] = useState<UserData>({
     user: null,
     token: null,
     isAdmin: false,
+    hasSubscription: false, // Inicialize hasSubscription como false
   });
 
-  // Função de login
   async function signIn({
     email,
     password,
@@ -47,19 +46,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     password: string;
   }): Promise<void> {
     try {
-      const res = await api.post("/login", { email, password }); // Fazemos uma solicitação HTTP para o endpoint de login
+      const res = await api.post("/login", { email, password });
       const { token } = res.data;
+      const decodedToken = jwtDecode<JwtPayload>(token);
 
-      // Atualizando o estado com os dados de autenticação
-      setData({ user: { email, password }, token, isAdmin: res.data.isAdmin });
+      setData({
+        user: { email, password },
+        token,
+        isAdmin: decodedToken.isAdmin,
+        hasSubscription: decodedToken.hasSubscription, // Defina hasSubscription com base no token decodificado
+      });
       toast.success("Login feito com sucesso.");
     } catch (error: any) {
       console.error("Erro ao fazer login:", error);
       if (error.response && error.response.data && error.response.data.error) {
-        // Se houver uma mensagem de erro na resposta, exiba-a
         toast.error(error.response.data.error);
       } else {
-        // Caso contrário, exiba uma mensagem de erro genérica
         toast.error(
           "Erro ao fazer login. Por favor, tente novamente mais tarde."
         );
@@ -68,43 +70,52 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }
 
-  // Função de logout
   function signOut() {
-    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"; // essa linha apaga o cookie
-
-    setData({ user: null, token: null, isAdmin: false });
+    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    setData({
+      user: null,
+      token: null,
+      isAdmin: false,
+      hasSubscription: false, // Defina hasSubscription como false durante o logout
+    });
   }
 
   useEffect(() => {
-    // Obter o cookie "token"
     const tokenCookie = document.cookie
       .split(";")
       .find((cookie) => cookie.trim().startsWith("token="));
 
-    // Se o cookie "token" existir
     if (tokenCookie) {
-      // Obter o valor do token do cookie
       const token = tokenCookie.split("=")[1];
 
-      // Decodificar o token JWT para extrair informações do usuário
       try {
         const decodedToken = jwtDecode<JwtPayload>(token);
         setData({
-          user: null, // Por enquanto, definimos como null, pois estamos apenas decodificando o token
+          user: null,
           token,
           isAdmin: decodedToken.isAdmin,
+          hasSubscription: decodedToken.hasSubscription, // Defina hasSubscription com base no token decodificado
         });
       } catch (error) {
         console.error("Erro ao decodificar o token:", error);
-        setData({ user: null, token: null, isAdmin: false });
+        setData({
+          user: null,
+          token: null,
+          isAdmin: false,
+          hasSubscription: false,
+        });
       }
     } else {
-      // Se o cookie "token" não existir, limpe os dados de autenticação
-      setData({ user: null, token: null, isAdmin: false });
+      setData({
+        user: null,
+        token: null,
+        isAdmin: false,
+        hasSubscription: false,
+      });
     }
   }, []);
 
-  // Renderização do provedor de autenticação
+  // Renderize o AuthContext.Provider para todos os casos
   return (
     <AuthContext.Provider
       value={{
@@ -113,6 +124,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         user: data.user,
         token: data.token,
         isAdmin: data.isAdmin,
+        hasSubscription: data.hasSubscription,
       }}
     >
       {children}
@@ -120,7 +132,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   );
 }
 
-// Hook para utilizar o contexto de autenticação
 export function useAuth() {
   const context = useContext(AuthContext);
   return context;
