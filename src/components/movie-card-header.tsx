@@ -5,8 +5,6 @@ interface Movie {
   id: string;
   image: string;
   title: string;
-  gender: string;
-  description: string;
 }
 
 interface MovieCardProps {

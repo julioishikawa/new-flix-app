@@ -11,7 +11,7 @@ interface Movie {
   id: string;
   image: string;
   title: string;
-  gender: string;
+  genres: string[];
   description: string;
 }
 

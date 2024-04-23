@@ -10,11 +10,12 @@ interface Movie {
   id: string;
   image: string;
   title: string;
-  gender: string;
+  genres: string[];
   description: string;
-  content: {
-    URL: string;
+  demo_content: {
+    trailer_URL: string;
   };
+  rating: number;
 }
 
 interface CategoryProps {

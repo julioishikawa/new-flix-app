@@ -7,7 +7,7 @@ interface Movie {
   id: string;
   image: string;
   title: string;
-  gender: string;
+  genres: string[];
   description: string;
   content: {
     URL: string;
@@ -19,22 +19,24 @@ export function Home() {
 
   const [actionMovies, setActionMovies] = useState<Movie[]>([]);
   const [comedyMovies, setComedyMovies] = useState<Movie[]>([]);
-  const [dramaMovies, setDramaMovies] = useState<Movie[]>([]);
+  const [terrorMovies, setTerrorMovies] = useState<Movie[]>([]);
 
   function filterMoviesByCategory(data: Movie[] | undefined) {
     if (!data) return; // Return early if data is undefined
 
-    const actionMovies = data.filter(
-      (movie: Movie) => movie.gender === "action"
+    const actionMovies = data.filter((movie: Movie) =>
+      movie.genres.includes("Ação")
     );
-    const comedyMovies = data.filter(
-      (movie: Movie) => movie.gender === "comedy"
+    const comedyMovies = data.filter((movie: Movie) =>
+      movie.genres.includes("Comédia")
     );
-    const dramaMovies = data.filter((movie: Movie) => movie.gender === "drama");
+    const terrorMovies = data.filter((movie: Movie) =>
+      movie.genres.includes("Terror")
+    );
 
     setActionMovies(actionMovies);
     setComedyMovies(comedyMovies);
-    setDramaMovies(dramaMovies);
+    setTerrorMovies(terrorMovies);
   }
 
   useEffect(() => {
@@ -47,13 +49,13 @@ export function Home() {
 
       <div className="p-10">
         {actionMovies.length > 0 && (
-          <MovieCategory title="action" movies={actionMovies} />
+          <MovieCategory title="Ação" movies={actionMovies} />
         )}
         {comedyMovies.length > 0 && (
-          <MovieCategory title="comedy" movies={comedyMovies} />
+          <MovieCategory title="Comédia" movies={comedyMovies} />
         )}
-        {dramaMovies.length > 0 && (
-          <MovieCategory title="drama" movies={dramaMovies} />
+        {terrorMovies.length > 0 && (
+          <MovieCategory title="Terror" movies={terrorMovies} />
         )}
       </div>
     </div>
