@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { api } from "../services/api";
 import { toast } from "sonner";
 import { useMovies } from "../hooks/movies";
+import { BackButton } from "../components/back-button";
 
 export function NewMovie() {
   const { getAllMovies } = useMovies();
@@ -14,6 +15,8 @@ export function NewMovie() {
   const [description, setDescription] = useState("");
   const [demoContentURL, setDemoContentURL] = useState("");
   const [contentURL, setContentURL] = useState("");
+
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   const validGenres = [
     "Ação",
@@ -75,93 +78,110 @@ export function NewMovie() {
   }
 
   return (
-    <div className="bg-black min-h-screen flex justify-center items-center">
+    <div className="bg-black min-h-screen p-10 flex flex-col justify-center items-center">
       <form
         encType="multipart/form-data"
-        className="bg-gray-800 p-8 rounded-lg shadow-lg"
+        className="bg-neutral-800 p-5 rounded-lg shadow-lg"
       >
-        <h1 className="text-white text-2xl mb-4">Adicionar filme</h1>
+        <BackButton />
 
-        <div className="mb-4">
-          <p className="text-white">Imagem do filme</p>
-          <input
-            type="file"
-            name="image"
-            onChange={(e) => {
-              const files = e.target.files;
-              if (files && files.length > 0) {
-                const file = files[0];
-                setImage(file);
-              }
-            }}
-            className="bg-gray-900 text-white p-2 rounded-md mt-2 w-full"
-          />
-        </div>
+        <div className="px-5 pb-5 h-full">
+          <h1 className="text-white text-2xl mb-4">Adicionar filme</h1>
 
-        <div className="mb-4">
-          <p className="text-white">Título</p>
-          <input
-            placeholder="Ex.: Titanic"
-            type="text"
-            onChange={(e) => setTitle(e.target.value)}
-            className="bg-gray-900 text-white p-2 rounded-md w-full mt-2"
-          />
-        </div>
-
-        <div className="mb-4">
-          <p className="text-white">Gênero</p>
-          <div className="flex flex-wrap mt-2">
-            {validGenres.map((genreOption) => (
-              <button
-                key={genreOption}
-                type="button"
-                className={`bg-gray-900 text-white p-2 rounded-md mr-2 mb-2 ${
-                  genres.includes(genreOption) ? "bg-blue-800" : ""
-                }`}
-                onClick={() => handleGenreClick(genreOption)}
-              >
-                {genreOption}
-              </button>
-            ))}
+          <div className="mb-4">
+            <p className="text-white ">Imagem do filme</p>
+            <label className="flex items-center justify-center cursor-pointer bg-neutral-900 text-white p-2 mt-2 rounded-md">
+              {imagePreview ? (
+                <img
+                  src={imagePreview}
+                  alt="Preview"
+                  className="max-w-52 h-auto rounded-md"
+                />
+              ) : (
+                "Selecione uma imagem"
+              )}
+              <input
+                type="file"
+                name="image"
+                onChange={(e) => {
+                  const files = e.target.files;
+                  if (files && files.length > 0) {
+                    const file = files[0];
+                    const imageURL = URL.createObjectURL(file);
+                    setImagePreview(imageURL);
+                    setImage(file);
+                  }
+                }}
+                className="hidden"
+              />
+            </label>
           </div>
-        </div>
 
-        <div className="mb-4">
-          <p className="text-white">Descrição</p>
-          <textarea
-            placeholder="Fale brevemente sobre o filme"
-            onChange={(e) => setDescription(e.target.value)}
-            className="bg-gray-900 text-white p-2 rounded-md w-full mt-2"
-          />
-        </div>
+          <div className="mb-4">
+            <p className="text-white">Título</p>
+            <input
+              placeholder="Ex.: Titanic"
+              type="text"
+              onChange={(e) => setTitle(e.target.value)}
+              className="bg-neutral-900 text-white p-2 rounded-md w-full mt-2"
+            />
+          </div>
 
-        <div className="mb-4">
-          <p className="text-white">URL do trailer</p>
-          <input
-            placeholder="Ex.: https://www.youtube.com/watch?v=dQw4w9WgXcQ"
-            type="text"
-            onChange={(e) => setDemoContentURL(e.target.value)}
-            className="bg-gray-900 text-white p-2 rounded-md w-full mt-2"
-          />
-        </div>
+          <div className="mb-4">
+            <p className="text-white">Gênero</p>
+            <div className="flex flex-wrap mt-2">
+              {validGenres.map((genreOption) => (
+                <button
+                  key={genreOption}
+                  type="button"
+                  className={`bg-neutral-900 text-white p-2 rounded-md mr-2 mb-2 ${
+                    genres.includes(genreOption) ? "bg-red-500" : ""
+                  }`}
+                  onClick={() => handleGenreClick(genreOption)}
+                >
+                  {genreOption}
+                </button>
+              ))}
+            </div>
+          </div>
 
-        <div className="mb-4">
-          <p className="text-white">URL do filme</p>
-          <input
-            placeholder="Ex.: https://www.youtube.com/watch?v=dQw4w9WgXcQ"
-            type="text"
-            onChange={(e) => setContentURL(e.target.value)}
-            className="bg-gray-900 text-white p-2 rounded-md w-full mt-2"
-          />
-        </div>
+          <div className="mb-4">
+            <p className="text-white">Descrição</p>
+            <textarea
+              placeholder="Fale brevemente sobre o filme"
+              onChange={(e) => setDescription(e.target.value)}
+              className="bg-neutral-900 text-white p-2 rounded-md w-full mt-2"
+            />
+          </div>
 
-        <button
-          type="button"
-          onClick={handleNewMovie}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-        >
-          Criar Filme
-        </button>
+          <div className="mb-4">
+            <p className="text-white">URL do trailer</p>
+            <input
+              placeholder="Ex.: https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+              type="text"
+              onChange={(e) => setDemoContentURL(e.target.value)}
+              className="bg-neutral-900 text-white p-2 rounded-md w-full mt-2"
+            />
+          </div>
+
+          <div className="mb-4">
+            <p className="text-white">URL do filme</p>
+            <input
+              placeholder="Ex.: https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+              type="text"
+              onChange={(e) => setContentURL(e.target.value)}
+              className="bg-neutral-900 text-white p-2 rounded-md w-full mt-2"
+            />
+          </div>
+
+          <button
+            type="button"
+            onClick={handleNewMovie}
+            className="bg-red-700 hover:bg-red-900 text-white font-bold py-2 px-4 rounded"
+          >
+            Criar Filme
+          </button>
+        </div>
       </form>
     </div>
   );

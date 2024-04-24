@@ -34,7 +34,7 @@ export function SignUp() {
   }
 
   return (
-    <div className="flex items-center h-screen bg-black">
+    <div className="flex items-center min-h-screen bg-black">
       <div className="h-auto max-w-md mx-auto p-6 bg-white rounded-lg shadow-md">
         <h2 className="text-2xl font-semibold mb-4 text-center">Registro</h2>
         <form onSubmit={handleSignUp}>
@@ -47,7 +47,7 @@ export function SignUp() {
               id="name"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-blue-400"
+              className="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-red-400"
               required
             />
           </div>
@@ -60,7 +60,7 @@ export function SignUp() {
               id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-blue-400"
+              className="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-red-400"
               required
             />
           </div>
@@ -73,7 +73,7 @@ export function SignUp() {
               id="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-blue-400"
+              className="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-red-400"
               required
             />
           </div>
@@ -86,20 +86,20 @@ export function SignUp() {
               id="confirmPassword"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              className="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-blue-400"
+              className="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-red-400"
               required
             />
           </div>
           <button
             type="submit"
-            className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition duration-300"
+            className="w-full bg-red-500 text-white py-2 rounded-md hover:bg-red-600 transition duration-300"
           >
             Registrar
           </button>
 
           <p className="mt-4 text-center">
             Já tem uma conta?{" "}
-            <Link to="/" className="text-blue-500 hover:underline">
+            <Link to="/" className="text-red-500 hover:underline">
               Entrar
             </Link>
           </p>

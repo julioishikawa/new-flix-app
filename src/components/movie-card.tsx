@@ -49,7 +49,7 @@ export default function MovieCard({ movie }: MovieCardProps) {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <Link to={`/movielist/${movie.id}`}>
+      <Link to={`/watch/${movie.id}`}>
         <img
           src={imageUrl}
           alt={movie.title}
@@ -61,7 +61,7 @@ export default function MovieCard({ movie }: MovieCardProps) {
 
       {showVideo && (
         <div className="min-w-96 min-h-56 z-10 ">
-          <div className="absolute -inset-1 flex flex-col bg-gray-900 bg-opacity-75 rounded">
+          <div className="absolute -inset-1 flex flex-col bg-neutral-800 bg-opacity-75 rounded">
             <iframe
               className="min-w-96 min-h-56"
               src={trailer_URL}
@@ -72,7 +72,7 @@ export default function MovieCard({ movie }: MovieCardProps) {
             />
 
             {showDescription && (
-              <div className="overflow-auto scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-transparent">
+              <div className="overflow-auto scrollbar-thin scrollbar-thumb-neutral-500 scrollbar-track-transparent">
                 <h2 className="text-white px-4 pt-4">
                   {rating}% gostaram desse filme
                 </h2>

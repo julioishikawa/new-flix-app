@@ -46,7 +46,6 @@ function MoviesProvider({ children }: MoviesProviderProps) {
       }
     } catch (error) {
       console.error("Error searching movies:", error);
-      // Trate o erro conforme necessário
     }
   }
 

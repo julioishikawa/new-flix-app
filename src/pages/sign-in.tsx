@@ -19,7 +19,7 @@ export function SignIn() {
   }
 
   return (
-    <div className="flex items-center h-screen bg-black">
+    <div className="flex items-center min-h-screen bg-black">
       <div className="h-auto max-w-md mx-auto p-6 bg-white rounded-lg shadow-md">
         <h2 className="text-2xl font-semibold mb-4 text-center">Login</h2>
         <form onSubmit={handleSignIn}>
@@ -33,7 +33,7 @@ export function SignIn() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               onKeyDown={handleKeyDown}
-              className="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-blue-400"
+              className="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-red-400"
               required
             />
           </div>
@@ -48,21 +48,21 @@ export function SignIn() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               onKeyDown={handleKeyDown}
-              className="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-blue-400"
+              className="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-red-400"
               required
             />
           </div>
 
           <button
             type="submit"
-            className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition duration-300"
+            className="w-full bg-red-500 text-white py-2 rounded-md hover:bg-red-600 transition duration-300"
           >
             Entrar
           </button>
         </form>
         <p className="mt-4 text-center">
           Ainda não tem uma conta?{" "}
-          <Link to="/registro" className="text-blue-500 hover:underline">
+          <Link to="/registro" className="text-red-500 hover:underline">
             Crie uma conta
           </Link>
         </p>

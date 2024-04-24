@@ -5,37 +5,32 @@ import { jwtDecode } from "jwt-decode";
 
 // Interfaces
 interface UserData {
-  user: User | null;
+  userId: string | null;
   token: string | null;
   isAdmin: boolean;
-  hasSubscription: boolean; // Inicialize hasSubscription como false
-}
-
-interface User {
-  email: string;
-  password: string;
+  hasSubscription: boolean;
 }
 
 interface JwtPayload {
   userId: string;
   isAdmin: boolean;
-  hasSubscription: boolean; // Adicione hasSubscription à interface JwtPayload
-  // Outras propriedades do token JWT, se houver
+  hasSubscription: boolean;
 }
 
 interface AuthContextType extends UserData {
   signIn: (credentials: { email: string; password: string }) => Promise<void>;
   signOut: () => void;
+  updateToken: (token: string) => void; // Adicione a função updateToken ao contexto
 }
 
 export const AuthContext = createContext({} as AuthContextType);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [data, setData] = useState<UserData>({
-    user: null,
+    userId: null,
     token: null,
     isAdmin: false,
-    hasSubscription: false, // Inicialize hasSubscription como false
+    hasSubscription: false,
   });
 
   async function signIn({
@@ -51,7 +46,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const decodedToken = jwtDecode<JwtPayload>(token);
 
       setData({
-        user: { email, password },
+        userId: decodedToken.userId, // Defina userId com base no token decodificado
         token,
         isAdmin: decodedToken.isAdmin,
         hasSubscription: decodedToken.hasSubscription, // Defina hasSubscription com base no token decodificado
@@ -73,11 +68,27 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   function signOut() {
     document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     setData({
-      user: null,
+      userId: null,
       token: null,
       isAdmin: false,
-      hasSubscription: false, // Defina hasSubscription como false durante o logout
+      hasSubscription: false,
     });
+  }
+
+  function updateToken(newToken: string) {
+    console.log("Novo token recebido:", newToken);
+
+    // Define o novo token no estado
+    setData((prevData) => ({
+      ...prevData,
+      token: newToken,
+    }));
+
+    // Expira o cookie antigo
+    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+
+    // Define o novo token no cookie
+    document.cookie = `token=${newToken}; path=/;`;
   }
 
   useEffect(() => {
@@ -91,7 +102,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       try {
         const decodedToken = jwtDecode<JwtPayload>(token);
         setData({
-          user: null,
+          userId: decodedToken.userId, // Defina userId com base no token decodificado
           token,
           isAdmin: decodedToken.isAdmin,
           hasSubscription: decodedToken.hasSubscription, // Defina hasSubscription com base no token decodificado
@@ -99,7 +110,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       } catch (error) {
         console.error("Erro ao decodificar o token:", error);
         setData({
-          user: null,
+          userId: null, // Defina userId como null em caso de erro de decodificação
           token: null,
           isAdmin: false,
           hasSubscription: false,
@@ -107,7 +118,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
     } else {
       setData({
-        user: null,
+        userId: null, // Defina userId como null se não houver token no cookie
         token: null,
         isAdmin: false,
         hasSubscription: false,
@@ -115,13 +126,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
-  // Renderize o AuthContext.Provider para todos os casos
   return (
     <AuthContext.Provider
       value={{
         signIn,
         signOut,
-        user: data.user,
+        updateToken,
+        userId: data.userId,
         token: data.token,
         isAdmin: data.isAdmin,
         hasSubscription: data.hasSubscription,

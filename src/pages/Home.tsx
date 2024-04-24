@@ -9,9 +9,10 @@ interface Movie {
   title: string;
   genres: string[];
   description: string;
-  content: {
-    URL: string;
+  demo_content: {
+    trailer_URL: string;
   };
+  rating: number;
 }
 
 export function Home() {
@@ -44,7 +45,7 @@ export function Home() {
   }, [movies]);
 
   return (
-    <div className="bg-black h-screen">
+    <div className="bg-black min-h-screen">
       <Header />
 
       <div className="p-10">
