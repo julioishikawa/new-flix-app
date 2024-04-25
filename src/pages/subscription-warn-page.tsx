@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Header } from "../components/header";
 import { api } from "../services/api";
 import { useAuth } from "../hooks/auth";
-import { useNavigate } from "react-router-dom";
+import { X } from "lucide-react";
 
 interface Subscription {
   id: string;
@@ -14,7 +14,6 @@ interface Subscription {
 
 export function SubscriptionWarningPage() {
   const { userId, updateToken } = useAuth();
-  const navigate = useNavigate();
 
   const [modalOpen, setModalOpen] = useState(true);
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
@@ -37,14 +36,12 @@ export function SubscriptionWarningPage() {
       );
 
       const { token } = response.data;
-      console.log("Token recebido da resposta:", token);
 
       if (token) {
         updateToken(token);
       }
 
-      console.log(`Usuário registrado com sucesso: ${userId}`);
-      navigate("/");
+      window.location.reload();
     } catch (error) {
       console.error("Erro ao registrar o usuário:", error);
     }
@@ -70,15 +67,15 @@ export function SubscriptionWarningPage() {
       <Header />
 
       <div className="relative flex justify-center items-center h-[90vh]">
-        <div className="text-white">
+        <div className="text-white text-xl">
           <h1>Você ainda não é inscrito D:</h1>
           <p>
-            Clique aqui para se{" "}
+            para ter acesso aos filmes você precisa ser um{" "}
             <button
               className="text-red-500 hover:underline"
               onClick={openModal}
             >
-              inscrever
+              assinante
             </button>
           </p>
         </div>
@@ -86,23 +83,40 @@ export function SubscriptionWarningPage() {
 
       {modalOpen && (
         <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-75">
-          <div className="absolute bg-white p-5 rounded-lg z-10">
-            <button onClick={closeModal}>X</button>
-            <h1>Escolha um plano:</h1>
-            <ul>
-              {subscriptions.map((subscription) => (
-                <li key={subscription.id}>
-                  <p>{subscription.name}</p>
-                  <p>{subscription.price}</p>
-                  {subscription.benefits.map((benefit, index) => (
-                    <p key={index}>{benefit}</p>
-                  ))}
-                  <button onClick={() => registerUser(subscription.type)}>
-                    Selecionar
-                  </button>
-                </li>
-              ))}
-            </ul>
+          <div className="absolute bg-neutral-800 text-white w-[50vw] p-7 rounded-lg z-10 flex flex-col animate-slide-down">
+            <div className="self-end">
+              <X
+                className="cursor-pointer transition ease-in-out hover:scale-110 duration-300"
+                onClick={closeModal}
+              />
+            </div>
+
+            <div className="flex flex-col gap-10 ">
+              <h1 className="text-center text-3xl font-bold">
+                Escolha um plano
+              </h1>
+              <ul className="flex gap-5 justify-around">
+                {subscriptions.map((subscription) => (
+                  <li
+                    key={subscription.id}
+                    className="h-full flex flex-col gap-5 p-5 text-lg border-2 rounded bg-neutral-700 transition ease-in-out delay-150 hover:scale-105 duration-300"
+                  >
+                    <p className="text-2xl">{subscription.name}</p>
+                    <p>{`R$ ${subscription.price}`}</p>
+
+                    {subscription.benefits.map((benefit, index) => (
+                      <p key={index}>{benefit}</p>
+                    ))}
+                    <button
+                      className="text-white py-2 px-4 bg-red-800 rounded hover:bg-red-900 transition ease-in-out hover:scale-105 duration-300"
+                      onClick={() => registerUser(subscription.type)}
+                    >
+                      Selecionar
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         </div>
       )}

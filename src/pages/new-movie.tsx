@@ -135,7 +135,9 @@ export function NewMovie() {
                   key={genreOption}
                   type="button"
                   className={`bg-neutral-900 text-white p-2 rounded-md mr-2 mb-2 ${
-                    genres.includes(genreOption) ? "bg-red-500" : ""
+                    genres.includes(genreOption)
+                      ? "transition ease-in-out delay-150 bg-red-500 -translate-y-1 duration-300"
+                      : "transition ease-in-out delay-150 duration-300"
                   }`}
                   onClick={() => handleGenreClick(genreOption)}
                 >
@@ -177,7 +179,7 @@ export function NewMovie() {
           <button
             type="button"
             onClick={handleNewMovie}
-            className="bg-red-700 hover:bg-red-900 text-white font-bold py-2 px-4 rounded"
+            className="text-white py-2 px-4 bg-red-800 rounded hover:bg-red-900 transition ease-in-out hover:scale-105 duration-300"
           >
             Criar Filme
           </button>

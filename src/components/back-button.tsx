@@ -9,7 +9,10 @@ export function BackButton() {
   }
 
   return (
-    <button className="text-white mb-4" onClick={goBack}>
+    <button
+      className="text-white mb-4 transition ease-in-out hover:scale-110 duration-300"
+      onClick={goBack}
+    >
       <ArrowLeft size="24" />
     </button>
   );

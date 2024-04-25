@@ -20,7 +20,7 @@ export function SignIn() {
 
   return (
     <div className="flex items-center min-h-screen bg-black">
-      <div className="h-auto max-w-md mx-auto p-6 bg-white rounded-lg shadow-md">
+      <div className="h-auto max-w-md mx-auto p-6 bg-white rounded-lg animate-opacity-down">
         <h2 className="text-2xl font-semibold mb-4 text-center">Login</h2>
         <form onSubmit={handleSignIn}>
           <div className="mb-4">

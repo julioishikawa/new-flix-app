@@ -60,7 +60,7 @@ export default function MovieCard({ movie }: MovieCardProps) {
       </Link>
 
       {showVideo && (
-        <div className="min-w-96 min-h-56 z-10 ">
+        <div className="min-w-96 min-h-56 z-10 animate-opacity-down">
           <div className="absolute -inset-1 flex flex-col bg-neutral-800 bg-opacity-75 rounded">
             <iframe
               className="min-w-96 min-h-56"
