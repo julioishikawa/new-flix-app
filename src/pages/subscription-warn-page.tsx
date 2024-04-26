@@ -3,6 +3,7 @@ import { Header } from "../components/header";
 import { api } from "../services/api";
 import { useAuth } from "../hooks/auth";
 import { X } from "lucide-react";
+import { toast } from "sonner";
 
 interface Subscription {
   id: string;
@@ -64,18 +65,22 @@ export function SubscriptionWarningPage() {
 
   return (
     <div className="min-h-screen bg-black">
-      <Header />
+      <Header
+        filterMoviesByCategory={function (): void {
+          toast.error("Você não é um assinante!");
+        }}
+      />
 
       <div className="relative flex justify-center items-center h-[90vh]">
         <div className="text-white text-xl">
-          <h1>Você ainda não é inscrito D:</h1>
+          <h1>Você ainda não é um assinante D:</h1>
           <p>
-            para ter acesso aos filmes você precisa ser um{" "}
+            para ter acesso aos filmes você precisa escolher um{" "}
             <button
               className="text-red-500 hover:underline"
               onClick={openModal}
             >
-              assinante
+              plano de assinatura
             </button>
           </p>
         </div>
