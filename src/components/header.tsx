@@ -44,46 +44,64 @@ export function Header({ filterMoviesByCategory }: Props) {
       <div className="relative">
         <button
           onClick={toggleCategories}
-          className="text-white hover:text-gray-300 focus:outline-none transition ease-in-out duration-300"
+          className="text-white hover:text-gray-300 focus:outline-none"
         >
           Categorias
+          <span className="ml-1">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className={`h-4 w-4 inline-block ${
+                showCategories ? "transform rotate-180" : ""
+              }`}
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M19 9l-7 7-7-7"
+              />
+            </svg>
+          </span>
         </button>
 
         {showCategories && (
-          <div className="flex flex-col absolute top-full left-0 bg-neutral-800 rounded shadow-lg py-2 px-4 mt-1 z-10">
+          <div className="flex flex-col absolute top-full left-0 bg-neutral-800 rounded shadow-lg py-2 px-4 mt-1 z-10 animate-opacity-down">
             <button
               onClick={() => handleCategoryClick("Ação")}
-              className="block text-white hover:text-gray-300 transition ease-in-out duration-300 py-1"
+              className="block text-white hover:text-gray-300 py-1"
             >
               Ação
             </button>
             <button
               onClick={() => handleCategoryClick("Comédia")}
-              className="block text-white hover:text-gray-300 transition ease-in-out duration-300 py-1"
+              className="block text-white hover:text-gray-300 py-1"
             >
               Comédia
             </button>
             <button
               onClick={() => handleCategoryClick("Drama")}
-              className="block text-white hover:text-gray-300 transition ease-in-out duration-300 py-1"
+              className="block text-white hover:text-gray-300 py-1"
             >
               Drama
             </button>
             <button
               onClick={() => handleCategoryClick("Ficção Científica")}
-              className="block text-white hover:text-gray-300 transition ease-in-out duration-300 py-1"
+              className="block text-white hover:text-gray-300 py-1"
             >
               Ficção Científica
             </button>
             <button
               onClick={() => handleCategoryClick("Suspense")}
-              className="block text-white hover:text-gray-300 transition ease-in-out duration-300 py-1"
+              className="block text-white hover:text-gray-300 py-1"
             >
               Suspense
             </button>
             <button
               onClick={() => handleCategoryClick("Terror")}
-              className="block text-white hover:text-gray-300 transition ease-in-out duration-300 py-1"
+              className="block text-white hover:text-gray-300 py-1"
             >
               Terror
             </button>
@@ -115,7 +133,7 @@ export function Header({ filterMoviesByCategory }: Props) {
       {isAdmin && (
         <Link
           to="/newmovie"
-          className="text-white py-2 px-4 bg-red-800 rounded hover:bg-red-900 transition ease-in-out hover:scale-105 duration-300"
+          className="text-white py-1 px-3 bg-red-800 rounded hover:bg-red-900 transition ease-in-out hover:scale-105 duration-300"
         >
           Novo filme
         </Link>

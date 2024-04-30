@@ -2,34 +2,48 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { api } from "../services/api";
 import { toast } from "sonner";
+import { LoadingSpinnerButton } from "../components/loading-spinner-button";
 
 export function SignUp() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
 
   async function handleSignUp(e: any) {
     e.preventDefault();
     try {
+      setIsLoading(true);
+
       await api.post("/users/newuser", {
         name,
         email,
         password,
         confirmPassword,
       });
+
+      setIsLoading(false);
       toast.success("Usuário registrado com sucesso.");
       navigate(-1);
     } catch (err: any) {
       if (err.response && err.response.data && err.response.data.error) {
         // Se o servidor retornar um erro específico, exibir a mensagem de erro retornada pelo servidor
         toast.error(err.response.data.error);
+        setIsLoading(false);
       } else {
         // Se houver qualquer outro tipo de erro, exibir uma mensagem de erro genérica
         toast.error("Não foi possível cadastrar. Por favor, tente novamente.");
+        setIsLoading(false);
       }
+    }
+  }
+
+  function handleKeyDown(e: any) {
+    if (e.key === "Enter") {
+      handleSignUp(e);
     }
   }
 
@@ -47,6 +61,7 @@ export function SignUp() {
               id="name"
               value={name}
               onChange={(e) => setName(e.target.value)}
+              onKeyDown={handleKeyDown}
               className="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-red-400"
               required
             />
@@ -60,6 +75,7 @@ export function SignUp() {
               id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              onKeyDown={handleKeyDown}
               className="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-red-400"
               required
             />
@@ -73,6 +89,7 @@ export function SignUp() {
               id="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              onKeyDown={handleKeyDown}
               className="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-red-400"
               required
             />
@@ -86,6 +103,7 @@ export function SignUp() {
               id="confirmPassword"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
+              onKeyDown={handleKeyDown}
               className="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-red-400"
               required
             />
@@ -94,7 +112,7 @@ export function SignUp() {
             type="submit"
             className="w-full bg-red-500 text-white py-2 rounded-md hover:bg-red-600 transition duration-300"
           >
-            Registrar
+            {isLoading ? <LoadingSpinnerButton /> : "Registrar"}
           </button>
 
           <p className="mt-4 text-center">

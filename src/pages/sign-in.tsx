@@ -1,15 +1,23 @@
 import { useState } from "react";
 import { useAuth } from "../hooks/auth";
 import { Link } from "react-router-dom";
+import { LoadingSpinnerButton } from "../components/loading-spinner-button";
 
 export function SignIn() {
   const { signIn } = useAuth();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   function handleSignIn(e: any) {
     e.preventDefault();
-    signIn({ email, password });
+
+    setIsLoading(true);
+    setTimeout(() => {
+      signIn({ email, password });
+      setIsLoading(false);
+    }, 500);
   }
 
   function handleKeyDown(e: any) {
@@ -57,7 +65,7 @@ export function SignIn() {
             type="submit"
             className="w-full bg-red-500 text-white py-2 rounded-md hover:bg-red-600 transition duration-300"
           >
-            Entrar
+            {isLoading ? <LoadingSpinnerButton /> : "Entrar"}
           </button>
         </form>
         <p className="mt-4 text-center">

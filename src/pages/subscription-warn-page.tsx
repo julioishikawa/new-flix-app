@@ -96,7 +96,7 @@ export function SubscriptionWarningPage() {
               />
             </div>
 
-            <div className="flex flex-col gap-10 ">
+            <div className="flex flex-col gap-14">
               <h1 className="text-center text-3xl font-bold">
                 Escolha um plano
               </h1>

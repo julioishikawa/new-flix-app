@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useMovies } from "../hooks/movies";
 import { Header } from "../components/header";
 import { MovieCategory } from "../components/movie-category";
+import { LoadingSpinner } from "../components/loading-spinner";
 
 interface Movie {
   id: string;
@@ -127,7 +128,11 @@ export function Home() {
   }, [movies]);
 
   if (!moviesLoaded) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex p-5 justify-center items-center min-h-screen bg-black">
+        <LoadingSpinner />
+      </div>
+    );
   }
 
   return (
@@ -135,22 +140,6 @@ export function Home() {
       <Header filterMoviesByCategory={filterMoviesByCategory} />
 
       <div className="p-10 animate-slide-right">
-        {!actionMovies.length &&
-          !comedyMovies.length &&
-          !dramaMovies.length &&
-          !scifiMovies.length &&
-          !thrillerMovies.length &&
-          !terrorMovies.length && (
-            <>
-              <MovieCategory title="Ação" movies={actionMovies} />
-              <MovieCategory title="Comédia" movies={comedyMovies} />
-              <MovieCategory title="Drama" movies={dramaMovies} />
-              <MovieCategory title="Ficção Científica" movies={scifiMovies} />
-              <MovieCategory title="Suspense" movies={thrillerMovies} />
-              <MovieCategory title="Terror" movies={terrorMovies} />
-            </>
-          )}
-
         {actionMovies.length > 0 && (
           <MovieCategory title="Ação" movies={actionMovies} />
         )}

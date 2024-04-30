@@ -1,12 +1,13 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { api } from "../services/api";
 import { toast } from "sonner";
 import { useMovies } from "../hooks/movies";
 import { BackButton } from "../components/back-button";
 import { LoadingSpinnerButton } from "../components/loading-spinner-button";
 
-export function NewMovie() {
+export function UpdateMovie() {
+  const { movieId } = useParams();
   const { getAllMovies } = useMovies();
   const navigate = useNavigate();
 
@@ -44,12 +45,8 @@ export function NewMovie() {
     return formData;
   }
 
-  async function handleNewMovie(e: any) {
+  async function handleUpdateMovie(e: any) {
     e.preventDefault();
-
-    if (!image) {
-      return toast.error("Você precisa definir uma imagem para o filme");
-    }
 
     try {
       setIsLoading(true);
@@ -63,33 +60,55 @@ export function NewMovie() {
         content: { URL: contentURL },
       };
 
-      const { data } = await api.post("/movielist/newmovie", movieData);
+      await api.put(`/movielist/editmovie/${movieId}`, movieData);
 
       if (image) {
         const imageFormData = handleImage();
-        await api.patch(`/movielist/upload/${data.movieId}`, imageFormData);
+        await api.patch(`/movielist/upload/${movieId}`, imageFormData);
       }
 
       setIsLoading(false);
-      toast.success("Filme criado com sucesso!");
+      toast.success("Filme atualizado com sucesso!");
       getAllMovies();
       navigate("/");
     } catch (error: any) {
       if (error.response) {
         toast.error(error.response.data.error);
-        setIsLoading(false);
       } else {
-        toast.error("Não foi possível criar o filme.");
-        setIsLoading(false);
+        toast.error("Não foi possível atualizar o filme.");
       }
+      setIsLoading(false);
     }
   }
 
   function handleKeyDown(e: any) {
     if (e.key === "Enter") {
-      handleNewMovie(e);
+      handleUpdateMovie(e);
     }
   }
+
+  useEffect(() => {
+    async function fetchMovie() {
+      try {
+        const { data } = await api.get(`/movielist/${movieId}`);
+        const movie = data.movie;
+
+        const imageMovie = `${api.defaults.baseURL}/movielist/${movie.id}/image`;
+
+        setImagePreview(imageMovie);
+        setTitle(movie.title);
+        setGenres(movie.genres);
+        setDescription(movie.description);
+        setDemoContentURL(movie.demo_content.trailer_URL);
+        setContentURL(movie.content.URL);
+      } catch (error) {
+        console.error("Erro ao buscar filme:", error);
+        toast.error("Erro ao buscar filme.");
+      }
+    }
+
+    fetchMovie();
+  }, [movieId]);
 
   return (
     <div className="bg-black min-h-screen p-10 flex flex-col justify-center items-center">
@@ -100,7 +119,7 @@ export function NewMovie() {
         <BackButton />
 
         <div className="px-5 pb-5 h-full">
-          <h1 className="text-white text-2xl mb-4">Adicionar filme</h1>
+          <h1 className="text-white text-2xl mb-4">Editar filme</h1>
 
           <div className="mb-4">
             <p className="text-white ">Imagem do filme</p>
@@ -136,6 +155,7 @@ export function NewMovie() {
             <input
               placeholder="Ex.: Titanic"
               type="text"
+              value={title}
               onChange={(e) => setTitle(e.target.value)}
               onKeyDown={handleKeyDown}
               className="bg-neutral-900 text-white p-2 rounded-md w-full mt-2"
@@ -167,9 +187,10 @@ export function NewMovie() {
             <p className="text-white">Descrição</p>
             <textarea
               placeholder="Fale brevemente sobre o filme"
+              value={description}
               onChange={(e) => setDescription(e.target.value)}
               onKeyDown={handleKeyDown}
-              className="bg-neutral-900 text-white p-2 rounded-md w-full mt-2"
+              className="bg-neutral-900 text-white p-2 mt-2 rounded-md w-full h-32 resize-none overflow-auto  scrollbar-thin scrollbar-thumb-neutral-500 scrollbar-track-transparent"
             />
           </div>
 
@@ -178,6 +199,7 @@ export function NewMovie() {
             <input
               placeholder="Ex.: https://www.youtube.com/watch?v=dQw4w9WgXcQ"
               type="text"
+              value={demoContentURL}
               onChange={(e) => setDemoContentURL(e.target.value)}
               onKeyDown={handleKeyDown}
               className="bg-neutral-900 text-white p-2 rounded-md w-full mt-2"
@@ -189,6 +211,7 @@ export function NewMovie() {
             <input
               placeholder="Ex.: https://www.youtube.com/watch?v=dQw4w9WgXcQ"
               type="text"
+              value={contentURL}
               onChange={(e) => setContentURL(e.target.value)}
               onKeyDown={handleKeyDown}
               className="bg-neutral-900 text-white p-2 rounded-md w-full mt-2"
@@ -197,10 +220,10 @@ export function NewMovie() {
 
           <button
             type="button"
-            onClick={handleNewMovie}
+            onClick={handleUpdateMovie}
             className="text-white py-2 px-4 bg-red-800 rounded hover:bg-red-900 transition ease-in-out hover:scale-105 duration-300"
           >
-            {isLoading ? <LoadingSpinnerButton /> : "Criar Filme"}
+            {isLoading ? <LoadingSpinnerButton /> : "Atualizar Filme"}
           </button>
         </div>
       </form>
