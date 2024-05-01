@@ -9,18 +9,24 @@ interface UserData {
   token: string | null;
   isAdmin: boolean;
   hasSubscription: boolean;
+  userName: string | null;
+  userEmail: string | null;
+  userAvatar: string | null;
 }
 
 interface JwtPayload {
   userId: string;
   isAdmin: boolean;
   hasSubscription: boolean;
+  userName: string;
+  userEmail: string;
+  userAvatar: string;
 }
 
 interface AuthContextType extends UserData {
   signIn: (credentials: { email: string; password: string }) => Promise<void>;
   signOut: () => void;
-  updateToken: (token: string) => void; // Adicione a função updateToken ao contexto
+  updateToken: (token: string) => void;
 }
 
 export const AuthContext = createContext({} as AuthContextType);
@@ -31,6 +37,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     token: null,
     isAdmin: false,
     hasSubscription: false,
+    userName: null,
+    userEmail: null,
+    userAvatar: null,
   });
 
   async function signIn({
@@ -46,10 +55,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const decodedToken = jwtDecode<JwtPayload>(token);
 
       setData({
-        userId: decodedToken.userId, // Defina userId com base no token decodificado
+        userId: decodedToken.userId,
         token,
         isAdmin: decodedToken.isAdmin,
-        hasSubscription: decodedToken.hasSubscription, // Defina hasSubscription com base no token decodificado
+        hasSubscription: decodedToken.hasSubscription,
+        userName: decodedToken.userName,
+        userEmail: decodedToken.userEmail,
+        userAvatar: decodedToken.userAvatar,
       });
       toast.success("Login feito com sucesso.");
     } catch (error: any) {
@@ -72,22 +84,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       token: null,
       isAdmin: false,
       hasSubscription: false,
+      userName: null,
+      userEmail: null,
+      userAvatar: null,
     });
   }
 
   function updateToken(newToken: string) {
-    console.log("Novo token recebido:", newToken);
-
-    // Define o novo token no estado
     setData((prevData) => ({
       ...prevData,
       token: newToken,
     }));
 
-    // Expira o cookie antigo
     document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-
-    // Define o novo token no cookie
     document.cookie = `token=${newToken}; path=/;`;
   }
 
@@ -102,26 +111,35 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       try {
         const decodedToken = jwtDecode<JwtPayload>(token);
         setData({
-          userId: decodedToken.userId, // Defina userId com base no token decodificado
+          userId: decodedToken.userId,
           token,
           isAdmin: decodedToken.isAdmin,
-          hasSubscription: decodedToken.hasSubscription, // Defina hasSubscription com base no token decodificado
+          hasSubscription: decodedToken.hasSubscription,
+          userName: decodedToken.userName,
+          userEmail: decodedToken.userEmail,
+          userAvatar: decodedToken.userAvatar,
         });
       } catch (error) {
         console.error("Erro ao decodificar o token:", error);
         setData({
-          userId: null, // Defina userId como null em caso de erro de decodificação
+          userId: null,
           token: null,
           isAdmin: false,
           hasSubscription: false,
+          userName: null,
+          userEmail: null,
+          userAvatar: null,
         });
       }
     } else {
       setData({
-        userId: null, // Defina userId como null se não houver token no cookie
+        userId: null,
         token: null,
         isAdmin: false,
         hasSubscription: false,
+        userName: null,
+        userEmail: null,
+        userAvatar: null,
       });
     }
   }, []);
@@ -136,6 +154,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         token: data.token,
         isAdmin: data.isAdmin,
         hasSubscription: data.hasSubscription,
+        userName: data.userName,
+        userEmail: data.userEmail,
+        userAvatar: data.userAvatar,
       }}
     >
       {children}

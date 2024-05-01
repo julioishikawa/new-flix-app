@@ -46,15 +46,17 @@ export function FilmPlayer() {
       <div className="w-full h-full">
         <div className="flex justify-between h-full">
           <BackButton />
-          <div className="flex gap-8">
-            <Link
-              to={`/updatemovie/${movie.id}`}
-              className="mb-4 py-1 px-3 text-white bg-red-800 rounded hover:bg-red-900 transition ease-in-out hover:scale-105 duration-300"
-            >
-              Editar
-            </Link>
-            {isAdmin && <DeleteButton movieId={movie.id} />}
-          </div>
+          {isAdmin && (
+            <div className="flex gap-8">
+              <Link
+                to={`/updatemovie/${movie.id}`}
+                className="mb-4 py-1 px-3 text-white bg-red-800 rounded hover:bg-red-900 transition ease-in-out hover:scale-105 duration-300"
+              >
+                Editar
+              </Link>
+              <DeleteButton movieId={movie.id} />
+            </div>
+          )}
         </div>
 
         <div className="aspect-w-16 aspect-h-9">

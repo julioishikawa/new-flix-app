@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import { SearchIcon, LogOutIcon } from "lucide-react";
+import { Link } from "react-router-dom";
+
 import { useAuth } from "../hooks/auth";
 import { useMovies } from "../hooks/movies";
+import { api } from "../services/api";
+import avatarPlaceholder from "../assets/avatar_placeholder.jpg";
 import MovieCardHeader from "./movie-card-header";
-import { Link } from "react-router-dom";
 
 interface Movie {
   id: string;
@@ -17,8 +20,13 @@ interface Props {
 }
 
 export function Header({ filterMoviesByCategory }: Props) {
-  const { signOut, isAdmin } = useAuth();
+  const { signOut, isAdmin, userId, userAvatar, userName } = useAuth();
   const { searchMovies, movieSought } = useMovies();
+
+  const avatarURL =
+    userAvatar !== "default.jpg"
+      ? `${api.defaults.baseURL}/users/${userId}/avatar`
+      : avatarPlaceholder;
 
   const [searchText, setSearchText] = useState("");
   const [showCategories, setShowCategories] = useState(false);
@@ -138,6 +146,24 @@ export function Header({ filterMoviesByCategory }: Props) {
           Novo filme
         </Link>
       )}
+
+      <div className="flex gap-5 items-center">
+        <h1 className="text-white">
+          Bem vindo, <br />{" "}
+          <Link to={`/profile/${userId}`}>
+            <span className="hover:text-red-800 transition ease-in-out duration-200">
+              {userName}
+            </span>
+          </Link>
+        </h1>
+        <Link to={`/profile/${userId}`}>
+          <img
+            src={avatarURL}
+            alt={`${userName} photo`}
+            className="h-14 w-14 object-cover rounded-full transition ease-in-out hover:scale-125 duration-300"
+          />
+        </Link>
+      </div>
 
       <button
         onClick={signOut}
