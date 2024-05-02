@@ -112,121 +112,120 @@ export function UpdateMovie() {
 
   return (
     <div className="bg-black min-h-screen p-10 flex flex-col justify-center items-center">
-      <form
-        encType="multipart/form-data"
-        className="bg-neutral-800 p-5 rounded-lg shadow-lg"
-      >
+      <div className="bg-neutral-800 p-5 rounded-lg shadow-lg">
         <BackButton />
 
-        <div className="px-5 pb-5 h-full">
-          <h1 className="text-white text-2xl mb-4">Editar filme</h1>
+        <form encType="multipart/form-data">
+          <div className="px-5 pb-5 h-full">
+            <h1 className="text-white text-2xl mb-4">Editar filme</h1>
 
-          <div className="mb-4">
-            <p className="text-white ">Imagem do filme</p>
-            <label className="flex items-center justify-center cursor-pointer bg-neutral-900 text-white p-2 mt-2 rounded-md">
-              {imagePreview ? (
-                <img
-                  src={imagePreview}
-                  alt="Preview"
-                  className="max-w-52 h-auto rounded-md"
+            <div className="mb-4">
+              <p className="text-white ">Imagem do filme</p>
+              <label className="flex items-center justify-center cursor-pointer bg-neutral-900 text-white p-2 mt-2 rounded-md">
+                {imagePreview ? (
+                  <img
+                    src={imagePreview}
+                    alt="Preview"
+                    className="max-w-52 h-auto rounded-md"
+                  />
+                ) : (
+                  "Selecione uma imagem"
+                )}
+                <input
+                  type="file"
+                  name="image"
+                  onChange={(e) => {
+                    const files = e.target.files;
+                    if (files && files.length > 0) {
+                      const file = files[0];
+                      const imageURL = URL.createObjectURL(file);
+                      setImagePreview(imageURL);
+                      setImage(file);
+                    }
+                  }}
+                  className="hidden"
                 />
-              ) : (
-                "Selecione uma imagem"
-              )}
-              <input
-                type="file"
-                name="image"
-                onChange={(e) => {
-                  const files = e.target.files;
-                  if (files && files.length > 0) {
-                    const file = files[0];
-                    const imageURL = URL.createObjectURL(file);
-                    setImagePreview(imageURL);
-                    setImage(file);
-                  }
-                }}
-                className="hidden"
-              />
-            </label>
-          </div>
-
-          <div className="mb-4">
-            <p className="text-white">Título</p>
-            <input
-              placeholder="Ex.: Titanic"
-              type="text"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              onKeyDown={handleKeyDown}
-              className="bg-neutral-900 text-white p-2 rounded-md w-full mt-2"
-            />
-          </div>
-
-          <div className="mb-4">
-            <p className="text-white">Gênero</p>
-            <div className="flex flex-wrap mt-2">
-              {validGenres.map((genreOption) => (
-                <button
-                  key={genreOption}
-                  type="button"
-                  className={`bg-neutral-900 text-white p-2 rounded-md mr-2 mb-2 ${
-                    genres.includes(genreOption)
-                      ? "transition ease-in-out delay-150 bg-red-500 -translate-y-1 duration-300"
-                      : "transition ease-in-out delay-150 duration-300"
-                  }`}
-                  onClick={() => handleGenreClick(genreOption)}
-                  onKeyDown={handleKeyDown}
-                >
-                  {genreOption}
-                </button>
-              ))}
+              </label>
             </div>
-          </div>
 
-          <div className="mb-4">
-            <p className="text-white">Descrição</p>
-            <textarea
-              placeholder="Fale brevemente sobre o filme"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              onKeyDown={handleKeyDown}
-              className="bg-neutral-900 text-white p-2 mt-2 rounded-md w-full h-32 resize-none overflow-auto  scrollbar-thin scrollbar-thumb-neutral-500 scrollbar-track-transparent"
-            />
-          </div>
+            <div className="mb-4">
+              <p className="text-white">Título</p>
+              <input
+                placeholder="Ex.: Titanic"
+                type="text"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                onKeyDown={handleKeyDown}
+                className="bg-neutral-900 text-white p-2 rounded-md w-full mt-2"
+              />
+            </div>
 
-          <div className="mb-4">
-            <p className="text-white">URL do trailer</p>
-            <input
-              placeholder="Ex.: https://www.youtube.com/watch?v=dQw4w9WgXcQ"
-              type="text"
-              value={demoContentURL}
-              onChange={(e) => setDemoContentURL(e.target.value)}
-              onKeyDown={handleKeyDown}
-              className="bg-neutral-900 text-white p-2 rounded-md w-full mt-2"
-            />
-          </div>
+            <div className="mb-4 px-5 pb-5 h-full">
+              <p className="text-white">Gênero</p>
+              <div className="flex flex-wrap mt-2">
+                {validGenres.map((genreOption) => (
+                  <button
+                    key={genreOption}
+                    type="button"
+                    className={`bg-neutral-900 text-white p-2 rounded-md mr-2 mb-2 ${
+                      genres.includes(genreOption)
+                        ? "transition ease-in-out delay-150 bg-red-500 -translate-y-1 duration-300"
+                        : "transition ease-in-out delay-150 duration-300"
+                    }`}
+                    onClick={() => handleGenreClick(genreOption)}
+                    onKeyDown={handleKeyDown}
+                  >
+                    {genreOption}
+                  </button>
+                ))}
+              </div>
+            </div>
 
-          <div className="mb-4">
-            <p className="text-white">URL do filme</p>
-            <input
-              placeholder="Ex.: https://www.youtube.com/watch?v=dQw4w9WgXcQ"
-              type="text"
-              value={contentURL}
-              onChange={(e) => setContentURL(e.target.value)}
-              onKeyDown={handleKeyDown}
-              className="bg-neutral-900 text-white p-2 rounded-md w-full mt-2"
-            />
-          </div>
+            <div className="mb-4">
+              <p className="text-white">Descrição</p>
+              <textarea
+                placeholder="Fale brevemente sobre o filme"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                onKeyDown={handleKeyDown}
+                className="bg-neutral-900 text-white p-2 mt-2 rounded-md w-full h-32 resize-none overflow-auto  scrollbar-thin scrollbar-thumb-neutral-500 scrollbar-track-transparent"
+              />
+            </div>
 
-          <button
-            type="button"
-            onClick={handleUpdateMovie}
-            className="text-white py-2 px-4 bg-red-800 rounded hover:bg-red-900 transition ease-in-out hover:scale-105 duration-300"
-          >
-            {isLoading ? <LoadingSpinnerButton /> : "Atualizar Filme"}
-          </button>
-        </div>
-      </form>
+            <div className="mb-4">
+              <p className="text-white">URL do trailer</p>
+              <input
+                placeholder="Ex.: https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+                type="text"
+                value={demoContentURL}
+                onChange={(e) => setDemoContentURL(e.target.value)}
+                onKeyDown={handleKeyDown}
+                className="bg-neutral-900 text-white p-2 rounded-md w-full mt-2"
+              />
+            </div>
+
+            <div className="mb-4">
+              <p className="text-white">URL do filme</p>
+              <input
+                placeholder="Ex.: https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+                type="text"
+                value={contentURL}
+                onChange={(e) => setContentURL(e.target.value)}
+                onKeyDown={handleKeyDown}
+                className="bg-neutral-900 text-white p-2 rounded-md w-full mt-2"
+              />
+            </div>
+
+            <button
+              type="button"
+              onClick={handleUpdateMovie}
+              className="text-white py-2 px-4 bg-red-800 rounded hover:bg-red-900 transition ease-in-out hover:scale-105 duration-300"
+            >
+              {isLoading ? <LoadingSpinnerButton /> : "Atualizar Filme"}
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }

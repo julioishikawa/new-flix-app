@@ -7,6 +7,7 @@ import { NewMovie } from "../pages/new-movie";
 import { SubscriptionWarningPage } from "../pages/subscription-warn-page";
 import { FilmPlayer } from "../pages/film-player";
 import { UpdateMovie } from "../pages/update-movie";
+import { UpdateProfile } from "../pages/update-profile";
 import { Profile } from "../pages/profile";
 
 export function AppRoutes() {
@@ -26,9 +27,9 @@ export function AppRoutes() {
         {(isAdmin || hasSubscription) && (
           <Route path="/watch/:movieId" element={<FilmPlayer />} />
         )}
-        {(isAdmin || hasSubscription) && (
-          <Route path="/profile/:userId" element={<Profile />} />
-        )}
+
+        <Route path="/profile/:userId" element={<Profile />} />
+        <Route path="/updateprofile/:userId" element={<UpdateProfile />} />
       </Routes>
     </MoviesProvider>
   );

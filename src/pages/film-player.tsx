@@ -46,6 +46,7 @@ export function FilmPlayer() {
       <div className="w-full h-full">
         <div className="flex justify-between h-full">
           <BackButton />
+
           {isAdmin && (
             <div className="flex gap-8">
               <Link

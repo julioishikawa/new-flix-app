@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../hooks/auth";
 import { useMovies } from "../hooks/movies";
 import { api } from "../services/api";
-import avatarPlaceholder from "../assets/avatar_placeholder.jpg";
+import avatarPlaceholder from "../assets/avatar_placeholder.png";
 import MovieCardHeader from "./movie-card-header";
 
 interface Movie {
@@ -160,7 +160,7 @@ export function Header({ filterMoviesByCategory }: Props) {
           <img
             src={avatarURL}
             alt={`${userName} photo`}
-            className="h-14 w-14 object-cover rounded-full transition ease-in-out hover:scale-125 duration-300"
+            className="h-14 w-14 object-cover rounded-full transition ease-in-out hover:scale-110 duration-300"
           />
         </Link>
       </div>
