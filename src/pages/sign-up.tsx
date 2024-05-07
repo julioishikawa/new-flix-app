@@ -15,6 +15,18 @@ export function SignUp() {
 
   async function handleSignUp(e: any) {
     e.preventDefault();
+
+    if (!name || !email || !password || !confirmPassword) {
+      toast.error("Por favor, preencha todos os campos.");
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      toast.error("Por favor, insira um endereço de email válido.");
+      return;
+    }
+
     try {
       setIsLoading(true);
 

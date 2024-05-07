@@ -55,6 +55,7 @@ export function FilmPlayer() {
               >
                 Editar
               </Link>
+
               <DeleteButton movieId={movie.id} />
             </div>
           )}

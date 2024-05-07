@@ -141,7 +141,7 @@ export function Header({ filterMoviesByCategory }: Props) {
       {isAdmin && (
         <Link
           to="/newmovie"
-          className="text-white py-1 px-3 bg-red-800 rounded hover:bg-red-900 transition ease-in-out hover:scale-105 duration-300"
+          className="text-white py-2 px-4 bg-red-800 rounded hover:bg-red-900 transition ease-in-out hover:scale-105 duration-300"
         >
           Novo filme
         </Link>
