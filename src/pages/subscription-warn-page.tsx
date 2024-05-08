@@ -18,30 +18,33 @@ interface Subscription {
 export function SubscriptionWarningPage() {
   const { userId, updateToken } = useAuth();
 
-  const [subOpen, setSubOpen] = useState(true);
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
-  const [paymentFormOpen, setPaymentFormOpen] = useState(false);
   const [userCreditCards, setUserCreditCards] = useState<any[]>([]);
+  const [subModalOpen, setSubModalOpen] = useState(true);
   const [showCreditCards, setShowCreditCards] = useState(false);
+  const [paymentModalOpen, setPaymentModalOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false); // Estado para controlar a abertura do modal de confirmação
+  const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
   const [selectedSubscription, setSelectedSubscription] =
-    useState<Subscription | null>(null); // Estado para armazenar a assinatura selecionada
+    useState<Subscription | null>(null);
+  const [selectedCreditCard, setSelectedCreditCard] = useState<any | null>(
+    null
+  );
 
   const openSub = () => {
-    setSubOpen(true);
+    setSubModalOpen(true);
   };
 
   const closeSub = () => {
-    setSubOpen(false);
+    setSubModalOpen(false);
   };
 
   const openPaymentForm = () => {
-    setPaymentFormOpen(true);
+    setPaymentModalOpen(true);
   };
 
   const closePaymentForm = () => {
-    setPaymentFormOpen(false);
+    setPaymentModalOpen(false);
     setShowCreditCards(false);
   };
 
@@ -53,7 +56,35 @@ export function SubscriptionWarningPage() {
     setIsModalOpen(false);
   };
 
+  const handleConfirmSubscription = () => {
+    setIsConfirmationModalOpen(false); // Fecha o modal de confirmação
+    if (selectedSubscription) {
+      registerUser(selectedSubscription.type); // Registra o usuário com a assinatura selecionada
+    }
+  };
+
+  const handleCancelSubscription = () => {
+    setIsConfirmationModalOpen(false); // Fecha o modal de confirmação
+    openPaymentForm(); // Abre novamente o modal de pagamento
+  };
+
+  const handleSubscriptionSelection = (subscription: Subscription) => {
+    setSelectedSubscription(subscription);
+
+    // Abre o modal de confirmação apenas se houver um cartão de crédito selecionado
+    if (selectedCreditCard) {
+      setIsConfirmationModalOpen(true);
+    } else {
+      openPaymentForm();
+    }
+  };
+
   function handleCardClick(cardId: string) {
+    const selectedCard = userCreditCards.find((card) => card.id === cardId);
+    if (selectedCard) {
+      setSelectedCreditCard(selectedCard);
+    }
+
     setUserCreditCards((prevCards) =>
       prevCards.map((card) =>
         card.id === cardId
@@ -95,6 +126,7 @@ export function SubscriptionWarningPage() {
     }
   }
 
+  // Dentro do useEffect
   useEffect(() => {
     const fetchSubscriptions = async () => {
       try {
@@ -105,31 +137,14 @@ export function SubscriptionWarningPage() {
       }
     };
 
-    if (subOpen) {
+    if (subModalOpen) {
       fetchSubscriptions();
     }
 
-    if (paymentFormOpen) {
+    if (paymentModalOpen) {
       fetchUserCreditCards(); // Chama a função para buscar os cartões de crédito do usuário quando o formulário de pagamento é aberto
     }
-  }, [subOpen, paymentFormOpen]);
-
-  const handleSubscriptionSelection = (subscription: Subscription) => {
-    setSelectedSubscription(subscription);
-    setIsConfirmationModalOpen(true); // Abre o modal de confirmação ao selecionar uma assinatura
-  };
-
-  const handleConfirmSubscription = () => {
-    setIsConfirmationModalOpen(false); // Fecha o modal de confirmação
-    if (selectedSubscription) {
-      registerUser(selectedSubscription.type); // Registra o usuário com a assinatura selecionada
-    }
-  };
-
-  const handleCancelSubscription = () => {
-    setIsConfirmationModalOpen(false); // Fecha o modal de confirmação
-    openPaymentForm(); // Abre novamente o modal de pagamento
-  };
+  }, [subModalOpen, paymentModalOpen]);
 
   return (
     <div className="min-h-screen bg-black">
@@ -151,7 +166,7 @@ export function SubscriptionWarningPage() {
         </div>
       </div>
 
-      {subOpen && (
+      {subModalOpen && (
         <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-75">
           <div className="absolute bg-black border-2 text-white w-[50vw] p-7 rounded-lg z-10 flex flex-col animate-slide-down">
             <div className="self-end">
@@ -179,7 +194,7 @@ export function SubscriptionWarningPage() {
                     ))}
                     <button
                       className="text-white py-2 px-4 bg-red-800 rounded hover:bg-red-900 transition ease-in-out hover:scale-105 duration-300"
-                      onClick={() => handleSubscriptionSelection(subscription)} // Alteração aqui
+                      onClick={() => handleSubscriptionSelection(subscription)}
                     >
                       Assinar
                     </button>
@@ -191,9 +206,9 @@ export function SubscriptionWarningPage() {
         </div>
       )}
 
-      {paymentFormOpen && (
+      {paymentModalOpen && (
         <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-75">
-          <div className="absolute bg-black border-2 text-white w-[50vw] p-2 rounded-lg z-10 flex flex-col animate-slide-down">
+          <div className="absolute bg-black border-2 text-white w-[40vw] p-2 rounded-lg z-10 flex flex-col animate-slide-down">
             <div className="self-end">
               <X
                 className="cursor-pointer transition ease-in-out hover:scale-110 duration-300"
@@ -282,10 +297,14 @@ export function SubscriptionWarningPage() {
         </div>
       )}
 
-      {isConfirmationModalOpen && (
+      {selectedCreditCard && isConfirmationModalOpen && (
         <ConfirmationModal
-          message={`Deseja continuar a assinatura com o cartão **** **** **** ${
+          message={`Deseja continuar o pagamento da assinatura ${
             selectedSubscription ? String(selectedSubscription.type) : ""
+          }  com o cartão **** **** **** ${
+            selectedCreditCard
+              ? String(selectedCreditCard.cardNumber).slice(-4)
+              : ""
           }?`}
           onConfirm={handleConfirmSubscription}
           onCancel={handleCancelSubscription}

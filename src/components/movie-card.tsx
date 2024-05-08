@@ -11,7 +11,7 @@ interface Movie {
   demo_content: {
     trailer_URL: string;
   };
-  rating?: number; // Make rating optional
+  rating?: number;
 }
 
 interface MovieCardProps {
