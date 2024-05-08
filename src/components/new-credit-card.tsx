@@ -33,13 +33,12 @@ export function NewCreditCard() {
     const month = cleanedValue.slice(0, 2);
     const year = cleanedValue.slice(2, 4);
 
-    // Retorna a data formatada
     return `${month}/${year}`;
   }
 
   function handleCardNumberChange(e: ChangeEvent<HTMLInputElement>) {
     const formattedValue = formatCardNumber(e.target.value);
-    // Limita o número máximo de caracteres a 19
+
     setCardNumber(formattedValue.slice(0, 19));
   }
 
@@ -49,7 +48,6 @@ export function NewCreditCard() {
   }
 
   function handleCvvChange(e: ChangeEvent<HTMLInputElement>) {
-    // Limita o número máximo de caracteres a 3
     setCvv(e.target.value.slice(0, 3));
   }
 

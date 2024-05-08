@@ -5,6 +5,7 @@ import { useAuth } from "../hooks/auth";
 import { X } from "lucide-react";
 import { toast } from "sonner";
 import { NewCreditCard } from "../components/new-credit-card";
+import { ConfirmationModal } from "../components/confirmation-modal"; // Importando o componente de modal de confirmação
 
 interface Subscription {
   id: string;
@@ -23,6 +24,9 @@ export function SubscriptionWarningPage() {
   const [userCreditCards, setUserCreditCards] = useState<any[]>([]);
   const [showCreditCards, setShowCreditCards] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false); // Estado para controlar a abertura do modal de confirmação
+  const [selectedSubscription, setSelectedSubscription] =
+    useState<Subscription | null>(null); // Estado para armazenar a assinatura selecionada
 
   const openSub = () => {
     setSubOpen(true);
@@ -38,6 +42,7 @@ export function SubscriptionWarningPage() {
 
   const closePaymentForm = () => {
     setPaymentFormOpen(false);
+    setShowCreditCards(false);
   };
 
   const openModal = () => {
@@ -47,6 +52,18 @@ export function SubscriptionWarningPage() {
   const closeModal = () => {
     setIsModalOpen(false);
   };
+
+  function handleCardClick(cardId: string) {
+    setUserCreditCards((prevCards) =>
+      prevCards.map((card) =>
+        card.id === cardId
+          ? { ...card, selected: true }
+          : { ...card, selected: false }
+      )
+    );
+
+    closePaymentForm();
+  }
 
   async function registerUser(type: string) {
     try {
@@ -78,18 +95,6 @@ export function SubscriptionWarningPage() {
     }
   }
 
-  const handleCardClick = (cardId: string) => {
-    setUserCreditCards((prevCards) =>
-      prevCards.map((card) =>
-        card.id === cardId
-          ? { ...card, selected: true }
-          : { ...card, selected: false }
-      )
-    );
-
-    closePaymentForm();
-  };
-
   useEffect(() => {
     const fetchSubscriptions = async () => {
       try {
@@ -108,6 +113,23 @@ export function SubscriptionWarningPage() {
       fetchUserCreditCards(); // Chama a função para buscar os cartões de crédito do usuário quando o formulário de pagamento é aberto
     }
   }, [subOpen, paymentFormOpen]);
+
+  const handleSubscriptionSelection = (subscription: Subscription) => {
+    setSelectedSubscription(subscription);
+    setIsConfirmationModalOpen(true); // Abre o modal de confirmação ao selecionar uma assinatura
+  };
+
+  const handleConfirmSubscription = () => {
+    setIsConfirmationModalOpen(false); // Fecha o modal de confirmação
+    if (selectedSubscription) {
+      registerUser(selectedSubscription.type); // Registra o usuário com a assinatura selecionada
+    }
+  };
+
+  const handleCancelSubscription = () => {
+    setIsConfirmationModalOpen(false); // Fecha o modal de confirmação
+    openPaymentForm(); // Abre novamente o modal de pagamento
+  };
 
   return (
     <div className="min-h-screen bg-black">
@@ -131,21 +153,19 @@ export function SubscriptionWarningPage() {
 
       {subOpen && (
         <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-75">
-          <div className="absolute bg-neutral-800 text-white w-[50vw] p-7 rounded-lg z-10 flex flex-col animate-slide-down">
+          <div className="absolute bg-black border-2 text-white w-[50vw] p-7 rounded-lg z-10 flex flex-col animate-slide-down">
             <div className="self-end">
               <X
                 className="cursor-pointer transition ease-in-out hover:scale-110 duration-300"
-                onClick={() => {
-                  closeSub();
-                }}
+                onClick={closeSub}
               />
             </div>
 
-            <div className="flex flex-col gap-14">
+            <div className="flex flex-col gap-10">
               <h1 className="text-center text-3xl font-bold">
                 Escolha um plano
               </h1>
-              <ul className="flex gap-5 justify-around">
+              <ul className="flex gap-5 justify-around pb-5">
                 {subscriptions.map((subscription) => (
                   <li
                     key={subscription.id}
@@ -159,20 +179,7 @@ export function SubscriptionWarningPage() {
                     ))}
                     <button
                       className="text-white py-2 px-4 bg-red-800 rounded hover:bg-red-900 transition ease-in-out hover:scale-105 duration-300"
-                      onClick={() => {
-                        // Verifica se há um cartão selecionado
-                        const selectedCard = userCreditCards.find(
-                          (card) => card.selected
-                        );
-
-                        if (selectedCard) {
-                          // Se houver um cartão selecionado, registre o usuário com o tipo de assinatura
-                          registerUser(subscription.type);
-                        } else {
-                          // Se nenhum cartão estiver selecionado, abra o modal para adicionar um novo cartão
-                          openPaymentForm();
-                        }
-                      }}
+                      onClick={() => handleSubscriptionSelection(subscription)} // Alteração aqui
                     >
                       Assinar
                     </button>
@@ -186,22 +193,20 @@ export function SubscriptionWarningPage() {
 
       {paymentFormOpen && (
         <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-75">
-          <div className="absolute bg-neutral-800 text-white w-[50vw] p-7 rounded-lg z-10 flex flex-col animate-slide-down">
+          <div className="absolute bg-black border-2 text-white w-[50vw] p-2 rounded-lg z-10 flex flex-col animate-slide-down">
             <div className="self-end">
               <X
                 className="cursor-pointer transition ease-in-out hover:scale-110 duration-300"
-                onClick={() => {
-                  closePaymentForm();
-                }}
+                onClick={closePaymentForm}
               />
             </div>
 
-            <div className="flex flex-col gap-10">
+            <div className="flex flex-col gap-7">
               <h1 className="text-center text-3xl font-bold">
                 Formas de pagamento
               </h1>
 
-              <div className="flex flex-col gap-5 p-5 border rounded bg-neutral-700">
+              <div className="flex flex-col gap-5 p-5 m-5 border rounded bg-neutral-800">
                 <div className="flex gap-5 justify-around">
                   <button
                     className="text-white py-2 px-4 bg-red-800 rounded hover:bg-red-900 transition ease-in-out duration-300"
@@ -218,17 +223,17 @@ export function SubscriptionWarningPage() {
                       setShowCreditCards(true);
                     }}
                   >
-                    Cartão de Crédito
+                    Pix
                   </button>
                 </div>
 
                 {showCreditCards && userCreditCards.length > 0 ? (
-                  <ul>
+                  <ul className="p-5 border bg-neutral-700">
                     {userCreditCards.map((card) => (
                       <li
                         key={card.id}
                         onClick={() => handleCardClick(card.id)}
-                        className={`mb-4 text-lg cursor-pointer bg-neutral-900 hover:bg-red-800 rounded p-1 ${
+                        className={`mb-4 text-lg cursor-pointer  bg-neutral-900 hover:bg-red-800 rounded p-1 ${
                           card.selected ? "bg-red-900" : ""
                         }`}
                       >
@@ -237,7 +242,7 @@ export function SubscriptionWarningPage() {
                     ))}
 
                     <button
-                      className="text-white py-2 px-4 mt-2 bg-red-800 rounded hover:bg-red-900 transition ease-in-out hover:scale-105 duration-300"
+                      className="text-white py-2 px-4 bg-red-800 rounded hover:bg-red-900 transition ease-in-out duration-300"
                       onClick={openModal}
                     >
                       Adicionar Cartão
@@ -249,7 +254,7 @@ export function SubscriptionWarningPage() {
                   <div className="text-center">
                     <p>Você ainda não possui cartões de crédito cadastrados.</p>
                     <button
-                      className="text-white py-2 px-4 bg-red-800 rounded hover:bg-red-900 transition ease-in-out hover:scale-105 duration-300"
+                      className="text-white py-2 px-4 mt-4 bg-red-800 rounded hover:bg-red-900 transition ease-in-out hover:scale-105 duration-300"
                       onClick={openModal}
                     >
                       Adicionar Cartão
@@ -259,9 +264,9 @@ export function SubscriptionWarningPage() {
 
                 {isModalOpen && (
                   <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-75 z-50">
-                    <div className="bg-black rounded-lg p-5 relative">
+                    <div className="bg-black border-2 rounded-lg p-5 relative">
                       <span
-                        className="close cursor-pointer text-white absolute top-3 right-3"
+                        className="close cursor-pointer text-white absolute top-2 right-2"
                         onClick={closeModal}
                       >
                         <X className="transition ease-in-out hover:scale-110 duration-100" />
@@ -275,6 +280,16 @@ export function SubscriptionWarningPage() {
             </div>
           </div>
         </div>
+      )}
+
+      {isConfirmationModalOpen && (
+        <ConfirmationModal
+          message={`Deseja continuar a assinatura com o cartão **** **** **** ${
+            selectedSubscription ? String(selectedSubscription.type) : ""
+          }?`}
+          onConfirm={handleConfirmSubscription}
+          onCancel={handleCancelSubscription}
+        />
       )}
     </div>
   );

@@ -11,7 +11,7 @@ interface Movie {
   demo_content: {
     trailer_URL: string;
   };
-  rating: number;
+  rating?: number; // Make rating optional
 }
 
 interface MovieCardProps {
@@ -73,8 +73,10 @@ export default function MovieCard({ movie }: MovieCardProps) {
 
             {showDescription && (
               <div className="overflow-auto scrollbar-thin scrollbar-thumb-neutral-500 scrollbar-track-transparent">
-                <h2 className="text-white px-4 pt-4">
-                  {rating}% gostaram desse filme
+                <h2 className="text-white text-lg px-4 pt-4">
+                  {rating
+                    ? `${rating}% gostaram desse filme`
+                    : "Não foi classificado ainda."}
                 </h2>
                 <p className="text-white p-4">{movie.description}</p>
               </div>
