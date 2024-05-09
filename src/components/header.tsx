@@ -47,7 +47,9 @@ export function Header({ filterMoviesByCategory }: Props) {
 
   return (
     <div className="flex items-center justify-between gap-4 px-10 py-3 bg-neutral-800">
-      <h1 className="text-white">ICONE</h1>
+      <Link className="text-white" to="/">
+        ICONE
+      </Link>
 
       <div className="relative">
         <button

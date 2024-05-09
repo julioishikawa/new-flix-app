@@ -18,7 +18,7 @@ export function DeleteButton({ movieId }: Props) {
     );
 
     if (response === true) {
-      toast.info("Aguarde o filme está sendo deletado...");
+      toast.loading("Aguarde o filme está sendo deletado...");
       try {
         await api.delete(`/movielist/${movieId}`);
         await getAllMovies();

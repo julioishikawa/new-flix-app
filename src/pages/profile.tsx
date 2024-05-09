@@ -94,16 +94,16 @@ export function Profile() {
   }, [userId]);
 
   return (
-    <div className="bg-black min-h-screen p-10 flex flex-col justify-center items-center">
-      <div className="max-w-5xl bg-neutral-800 p-5 rounded-lg shadow-lg">
+    <div className="bg-black w-full min-h-screen p-10 flex justify-center items-center">
+      <div className="w-[1024px] bg-neutral-800 p-5 rounded-lg shadow-lg">
         <BackHomeButton />
 
         <form>
           <div className="px-5 pb-5 h-full">
             <h1 className="text-white text-2xl mb-4">Perfil de {userName}</h1>
 
-            <div className="flex items-center p-3 mb-5 bg-neutral-700 rounded">
-              <label className="flex items-center justify-center bg-neutral-900 text-white p-2 rounded">
+            <div className="flex flex-col sm:flex-row items-center p-3 mb-5 bg-neutral-700 rounded">
+              <label className="w-full flex items-center justify-center bg-neutral-900 text-white p-2 rounded">
                 <img
                   src={avatarURL}
                   alt="Preview"
@@ -111,14 +111,14 @@ export function Profile() {
                 />
               </label>
 
-              <div className="min-w-96 flex flex-col justify-center p-3">
+              <div className="w-full flex flex-col justify-center px-3 pt-3">
                 <h2 className="mb-1 text-white">Email</h2>
 
                 <div className="relative w-full mb-4 bg-black rounded">
                   <input
                     type={showEmail ? "text" : "password"}
                     value={userEmail ?? ""}
-                    className=" bg-black text-white p-1 rounded"
+                    className="bg-black text-white p-1 rounded w-full"
                     disabled
                   />
 
@@ -136,14 +136,14 @@ export function Profile() {
                   <input
                     type="password"
                     value="12345678900987654321"
-                    className="bg-black text-white p-1  rounded"
+                    className="bg-black text-white p-1 rounded w-full"
                     disabled
                   />
                 </div>
 
                 <Link
                   to={`/updateprofile/${userId}`}
-                  className="text-white text-right hover:text-gray-300 focus:outline-none"
+                  className="text-white text-right hover:text-gray-300 focus:outline-none self-end"
                 >
                   Editar perfil
                 </Link>
@@ -158,13 +158,11 @@ export function Profile() {
                   {subscriptionType}
                 </span>
               </p>
-              <p className="text-white">
-                Tempo Restante da Assinatura: {remainingTime}
-              </p>
+              <p className="text-white">Tempo Restante: {remainingTime}</p>
             </div>
 
             <h1 className="text-white text-2xl my-4">Métodos de pagamento</h1>
-            <div className="flex flex-col gap-3 p-3 bg-neutral-700 rounded">
+            <div className="flex flex-col gap-3 p-3 bg-neutral-700 rounded w-full">
               <h2 className="text-white font-bold">Cartões de crédito</h2>
               {userCreditCards.map((card, index) => (
                 <div
@@ -188,7 +186,7 @@ export function Profile() {
 
               {isModalOpen && (
                 <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-75 z-50">
-                  <div className="bg-black rounded-lg p-5 relative">
+                  <div className="bg-black border-2 rounded-lg p-5 relative">
                     <span
                       className="close cursor-pointer text-white absolute top-3 right-3"
                       onClick={closeModal}
@@ -201,7 +199,7 @@ export function Profile() {
               )}
 
               <Link to="#" onClick={openModal}>
-                <button className="text-white py-2 px-4 bg-red-800 rounded hover:bg-red-900 transition ease-in-out duration-300">
+                <button className="text-white py-2 px-4 bg-red-800 rounded hover:bg-red-900 transition ease-in-out duration-300 w-full sm:w-auto">
                   Adicionar cartão
                 </button>
               </Link>

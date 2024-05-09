@@ -129,14 +129,14 @@ export function Home() {
 
   if (!moviesLoaded) {
     return (
-      <div className="flex p-5 justify-center items-center min-h-screen bg-black">
+      <div className="flex p-5 justify-center items-center min-h-screen bg-neutral-950">
         <LoadingSpinner />
       </div>
     );
   }
 
   return (
-    <div className="bg-black min-h-screen">
+    <div className="bg-neutral-900 min-h-screen">
       <Header filterMoviesByCategory={filterMoviesByCategory} />
 
       <div className="p-10 animate-slide-right">

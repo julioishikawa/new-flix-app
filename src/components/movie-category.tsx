@@ -24,15 +24,16 @@ interface CategoryProps {
 }
 
 export function MovieCategory({ title, movies }: CategoryProps) {
-  const swiperRef = useRef<any>(null); // Use uma ref para o componente Swiper
-  const [isNavVisible, setIsNavVisible] = useState(false); // Estado para controlar a visibilidade dos botões de navegação
+  const swiperRef = useRef<any>(null);
+  const [isNavVisible, setIsNavVisible] = useState(false);
+  const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 640);
 
   const handlePrevClick = () => {
-    swiperRef.current.swiper.slidePrev(); // Chame o método slidePrev() do Swiper ao clicar no botão prev
+    swiperRef.current.swiper.slidePrev();
   };
 
   const handleNextClick = () => {
-    swiperRef.current.swiper.slideNext(); // Chame o método slideNext() do Swiper ao clicar no botão next
+    swiperRef.current.swiper.slideNext();
   };
 
   useEffect(() => {
@@ -48,50 +49,55 @@ export function MovieCategory({ title, movies }: CategoryProps) {
     checkNavVisibility();
 
     const handleResize = () => {
-      checkNavVisibility(); // Atualiza a visibilidade dos botões quando a janela é redimensionada
+      checkNavVisibility();
+      setIsSmallScreen(window.innerWidth < 640);
     };
 
-    window.addEventListener("resize", handleResize); // Adiciona o ouvinte de evento para redimensionamento da janela
+    window.addEventListener("resize", handleResize);
 
     return () => {
-      window.removeEventListener("resize", handleResize); // Remove o ouvinte de evento quando o componente é desmontado
+      window.removeEventListener("resize", handleResize);
     };
   }, []);
 
   return (
-    <div className="px-14 relative z-0">
-      <h2 className="text-white text-xl font-bold pt-5">{title}</h2>
+    <div>
+      <h2 className="text-white text-xl font-bold mb-2 pt-6 pl-14">{title}</h2>
 
-      <Swiper
-        className="p-5 z-0"
-        wrapperClass="z-0"
-        slidesPerView="auto"
-        freeMode={true}
-        ref={swiperRef}
-      >
-        {movies.map((movie, index) => (
-          <SwiperSlide
-            key={movie.id}
-            className={`w-fit ${index !== movies.length - 1 ? "mr-16" : ""}`}
-          >
-            <MovieCard movie={movie} />
-          </SwiperSlide>
-        ))}
-      </Swiper>
+      <div className="px-14 relative z-0">
+        <Swiper
+          className="p-5 z-0 bg-neutral-950 rounded"
+          wrapperClass="z-0"
+          slidesPerView="auto"
+          freeMode={true}
+          ref={swiperRef}
+        >
+          {movies.map((movie, index) => (
+            <SwiperSlide
+              key={movie.id}
+              className={`w-fit ${isSmallScreen ? "sm:w-1/2" : ""} ${
+                index !== movies.length - 1 ? "mr-16" : ""
+              }`}
+            >
+              <MovieCard movie={movie} />
+            </SwiperSlide>
+          ))}
+        </Swiper>
 
-      {isNavVisible && (
-        <>
-          <div
-            className="swiper-button-prev absolute top-32 text-white cursor-pointer"
-            onClick={handlePrevClick}
-          ></div>
+        {window.innerWidth >= 640 && isNavVisible && (
+          <>
+            <div
+              className="swiper-button-prev absolute text-white cursor-pointer"
+              onClick={handlePrevClick}
+            ></div>
 
-          <div
-            className="swiper-button-next absolute top-32 text-white cursor-pointer"
-            onClick={handleNextClick}
-          ></div>
-        </>
-      )}
+            <div
+              className="swiper-button-next absolute text-white cursor-pointer"
+              onClick={handleNextClick}
+            ></div>
+          </>
+        )}
+      </div>
     </div>
   );
 }

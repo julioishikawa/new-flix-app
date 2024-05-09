@@ -123,8 +123,8 @@ export function FilmPlayer() {
         </div>
 
         {showModal && (
-          <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-75">
-            <div className="relative flex flex-col gap-8 items-center bg-black p-8 rounded-lg border-2">
+          <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-75 ">
+            <div className="relative flex flex-col gap-8 items-center bg-black p-8 rounded-lg border-2 animate-slide-right">
               <button
                 className="absolute top-3 right-3 text-white"
                 onClick={handleCloseModal}
