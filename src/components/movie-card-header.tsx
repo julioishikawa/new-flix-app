@@ -17,8 +17,12 @@ export default function MovieCardHeader({ movie }: MovieCardProps) {
   return (
     <div className="w-full hover:bg-red-900 duration-700 border-b-2 border-white">
       <Link to={`/watch/${movie.id}`} className="flex items-center">
-        <img src={image} alt={movie.title} className="w-20 h-20 object-cover" />
-        <h2 className="text-white text-xl flex-grow text-center">
+        <img
+          src={image}
+          alt={movie.title}
+          className="w-20 h-20 object-cover border-r-2"
+        />
+        <h2 className="text-white text-lg text-center p-2 overflow-hidden whitespace-nowrap overflow-ellipsis">
           {movie.title}
         </h2>
       </Link>

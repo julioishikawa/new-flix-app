@@ -26,7 +26,7 @@ interface CategoryProps {
 export function MovieCategory({ title, movies }: CategoryProps) {
   const swiperRef = useRef<any>(null);
   const [isNavVisible, setIsNavVisible] = useState(false);
-  const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 640);
+  const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
 
   const handlePrevClick = () => {
     swiperRef.current.swiper.slidePrev();
@@ -50,7 +50,7 @@ export function MovieCategory({ title, movies }: CategoryProps) {
 
     const handleResize = () => {
       checkNavVisibility();
-      setIsSmallScreen(window.innerWidth < 640);
+      setIsSmallScreen(window.innerWidth < 768);
     };
 
     window.addEventListener("resize", handleResize);
@@ -67,7 +67,7 @@ export function MovieCategory({ title, movies }: CategoryProps) {
       <div className="px-14 relative z-0">
         <Swiper
           className="p-5 z-0 bg-neutral-950 rounded"
-          wrapperClass="z-0"
+          wrapperClass="min-w-96 z-0"
           slidesPerView="auto"
           freeMode={true}
           ref={swiperRef}
@@ -75,8 +75,8 @@ export function MovieCategory({ title, movies }: CategoryProps) {
           {movies.map((movie, index) => (
             <SwiperSlide
               key={movie.id}
-              className={`w-fit ${isSmallScreen ? "sm:w-1/2" : ""} ${
-                index !== movies.length - 1 ? "mr-16" : ""
+              className={`w-fit ${isSmallScreen ? "md:w-1/2 h-56" : ""} ${
+                index !== movies.length - 1 ? "mr-12" : ""
               }`}
             >
               <MovieCard movie={movie} />
@@ -84,7 +84,7 @@ export function MovieCategory({ title, movies }: CategoryProps) {
           ))}
         </Swiper>
 
-        {window.innerWidth >= 640 && isNavVisible && (
+        {window.innerWidth >= 768 && isNavVisible && (
           <>
             <div
               className="swiper-button-prev absolute text-white cursor-pointer"

@@ -123,7 +123,7 @@ export function FilmPlayer() {
         </div>
 
         {showModal && (
-          <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-75 ">
+          <div className="fixed top-0 left-0 w-full h-full p-10 flex items-center justify-center bg-black bg-opacity-75">
             <div className="relative flex flex-col gap-8 items-center bg-black p-8 rounded-lg border-2 animate-slide-right">
               <button
                 className="absolute top-3 right-3 text-white"
@@ -136,7 +136,7 @@ export function FilmPlayer() {
                 Obrigado por assistir, deseja classificar o filme?
               </h1>
 
-              <div className="flex justify-center gap-4">
+              <div className="flex flex-wrap justify-center gap-4">
                 <div className="text-white flex flex-col items-center gap-2 min-w-20">
                   <ThumbsDown
                     size="40"

@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Eye, EyeOff, Trash2, X } from "lucide-react"; // Importe o ícone de lixeira
+import { Eye, EyeOff, Trash2, X } from "lucide-react";
 import { api } from "../services/api";
 import { useAuth } from "../hooks/auth";
 import { BackHomeButton } from "../components/back-home-button";
 import avatarPlaceholder from "../assets/avatar_placeholder.png";
 import { toast } from "sonner";
 import { NewCreditCard } from "../components/new-credit-card";
+import { ConfirmationModal } from "../components/confirmation-modal";
 
 export function Profile() {
   const { userName, userEmail, userAvatar, userId } = useAuth();
@@ -16,6 +17,9 @@ export function Profile() {
     { id: string; cardNumber: number; expiration: number; cvv: number }[]
   >([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showConfirmation, setShowConfirmation] = useState<{
+    [key: string]: boolean;
+  }>({});
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -36,30 +40,29 @@ export function Profile() {
     setShowEmail((prevState) => !prevState);
   };
 
-  async function handleDeleteCard(
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-    cardId: string
-  ) {
-    e.preventDefault();
+  async function handleDeleteCardConfirm(cardId: string) {
+    try {
+      await api.delete(`/users/${userId}/${cardId}`);
 
-    const response = window.confirm(
-      "Você tem certeza que quer deletar o cartão?"
-    );
+      const updatedCards = userCreditCards.filter((card) => card.id !== cardId);
 
-    if (response === true) {
-      try {
-        await api.delete(`/users/${userId}/${cardId}`);
+      setUserCreditCards(updatedCards);
+      toast.success("Cartão deletado com sucesso!");
 
-        const updatedCards = userCreditCards.filter(
-          (card) => card.id !== cardId
-        );
-
-        setUserCreditCards(updatedCards);
-        toast.success("Cartão deletado com sucesso!");
-      } catch (error) {
-        console.error("Erro ao excluir o cartão de crédito:", error);
-      }
+      setShowConfirmation((prevState) => ({
+        ...prevState,
+        [cardId]: false,
+      }));
+    } catch (error) {
+      console.error("Erro ao excluir o cartão de crédito:", error);
     }
+  }
+
+  function handleDeleteCardCancel(cardId: string) {
+    setShowConfirmation((prevState) => ({
+      ...prevState,
+      [cardId]: false,
+    }));
   }
 
   useEffect(() => {
@@ -98,7 +101,7 @@ export function Profile() {
       <div className="w-[1024px] bg-neutral-800 p-5 rounded-lg shadow-lg">
         <BackHomeButton />
 
-        <form>
+        <div>
           <div className="px-5 pb-5 h-full">
             <h1 className="text-white text-2xl mb-4">Perfil de {userName}</h1>
 
@@ -173,14 +176,29 @@ export function Profile() {
                     **** **** **** {String(card.cardNumber).slice(-4)}
                   </p>
                   <button
-                    onClick={(e) => handleDeleteCard(e, card.id)}
                     className="text-red-500"
+                    onClick={() =>
+                      setShowConfirmation((prevState) => ({
+                        ...prevState,
+                        [card.id]: true,
+                      }))
+                    }
                   >
                     <Trash2
                       size={20}
                       className="transition ease-in-out hover:scale-110 duration-300"
                     />
                   </button>
+
+                  {showConfirmation[card.id] && (
+                    <ConfirmationModal
+                      message={`Você tem certeza que deseja deletar o cartão que terminar com ${String(
+                        card.cardNumber
+                      ).slice(-4)}`}
+                      onConfirm={() => handleDeleteCardConfirm(card.id)}
+                      onCancel={() => handleDeleteCardCancel(card.id)}
+                    />
+                  )}
                 </div>
               ))}
 
@@ -205,7 +223,7 @@ export function Profile() {
               </Link>
             </div>
           </div>
-        </form>
+        </div>
       </div>
     </div>
   );

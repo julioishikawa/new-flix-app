@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { api } from "../services/api";
 
@@ -21,6 +21,7 @@ interface MovieCardProps {
 export default function MovieCard({ movie }: MovieCardProps) {
   const [showDescription, setShowDescription] = useState(false);
   const [showVideo, setShowVideo] = useState(false);
+  const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
   const timeoutRef = useRef<any | null>(null);
 
   const {
@@ -43,9 +44,21 @@ export default function MovieCard({ movie }: MovieCardProps) {
     setShowVideo(false);
   };
 
+  useEffect(() => {
+    const handleResize = () => {
+      setIsSmallScreen(window.innerWidth < 768);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   return (
     <div
-      className="relative transition w-full h-full duration-300 ease-in-out transform hover:scale-105"
+      className="relative transition duration-300 ease-in-out transform hover:scale-105"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
@@ -53,13 +66,19 @@ export default function MovieCard({ movie }: MovieCardProps) {
         <img
           src={imageUrl}
           alt={movie.title}
-          className="max-w-40 h-60 object-cover"
+          className={` ${
+            isSmallScreen ? "w-32 h-48 object-cover" : "w-40 h-60 object-cover"
+          } `}
         />
 
-        <h2 className="text-white text-lg text-center mt-2">{movie.title}</h2>
+        {isSmallScreen && (
+          <h2 className="mt-2 w-32 text-white text-lg text-center overflow-hidden whitespace-nowrap overflow-ellipsis">
+            {movie.title}
+          </h2>
+        )}
       </Link>
 
-      {showVideo && (
+      {window.innerWidth >= 768 && showVideo && (
         <div className="min-w-80 min-h-24 animate-opacity-down">
           <div className="absolute -inset-1 flex flex-col bg-neutral-900 rounded">
             <iframe
@@ -73,7 +92,8 @@ export default function MovieCard({ movie }: MovieCardProps) {
 
             {showDescription && (
               <div className="overflow-auto scrollbar-thin scrollbar-thumb-neutral-500 scrollbar-track-transparent">
-                <h2 className="text-white text-lg px-4 pt-4">
+                <h1 className="text-white text-lg px-4 pt-2">{movie.title}</h1>
+                <h2 className="text-white text-lg px-4 pt-2">
                   {rating
                     ? `${rating}% gostaram desse filme`
                     : "Não foi classificado ainda."}
