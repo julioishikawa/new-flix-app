@@ -87,58 +87,65 @@ export function NewCreditCard() {
     <div className="bg-black p-5 flex flex-col justify-center items-center">
       <div className="bg-neutral-800 p-5 rounded-lg shadow-lg">
         <form>
-          <div className="">
-            <h1 className="text-white text-2xl mb-4">Novo Cartão de Crédito</h1>
+          <h1 className="text-white font-bold text-lg md:text-2xl mb-4">
+            Novo Cartão de Crédito
+          </h1>
 
-            <div className="mb-4">
-              <p className="text-white">Número do Cartão</p>
-              <input
-                type="text"
-                value={cardNumber}
-                onChange={handleCardNumberChange}
-                className="bg-neutral-900 text-white p-2 rounded-md w-full mt-2"
-              />
-            </div>
-
-            <div className="mb-4">
-              <p className="text-white">Nome no Cartão</p>
-              <input
-                type="text"
-                value={cardName}
-                onChange={(e) => setCardName(e.target.value)}
-                className="bg-neutral-900 text-white p-2 rounded-md w-full mt-2"
-              />
-            </div>
-
-            <div className="mb-4">
-              <p className="text-white">Data de Expiração (MM/YY)</p>
-              <input
-                type="text"
-                value={expiration}
-                onChange={handleExpirationChange}
-                className="bg-neutral-900 text-white p-2 rounded-md w-full mt-2"
-              />
-            </div>
-
-            <div className="mb-4">
-              <p className="text-white">CVV</p>
-              <input
-                type="text"
-                value={cvv}
-                onChange={handleCvvChange}
-                className="bg-neutral-900 text-white p-2 rounded-md w-full mt-2"
-              />
-            </div>
-
-            <button
-              type="button"
-              onClick={handleNewCreditCard}
-              onKeyDown={handleKeyDown}
-              className="text-white py-2 px-4 bg-red-800 rounded hover:bg-red-900 transition ease-in-out hover:scale-105 duration-300"
-            >
-              {isLoading ? <LoadingSpinnerButton /> : "Criar Cartão"}
-            </button>
+          <div className="flex">
+            <span className="relative text-xs text-white font-bold ">
+              *Crie um cartão fictício
+              <span className="animate-ping w-3 h-3 absolute ml-2 rounded-full bg-red-700 opacity-100"></span>
+            </span>
           </div>
+
+          <div className="my-4">
+            <p className="text-white">Número do Cartão</p>
+            <input
+              type="text"
+              value={cardNumber}
+              onChange={handleCardNumberChange}
+              className="bg-neutral-900 text-white p-2 rounded-md w-full mt-2"
+            />
+          </div>
+
+          <div className="mb-4">
+            <p className="text-white">Nome no Cartão</p>
+            <input
+              type="text"
+              value={cardName}
+              onChange={(e) => setCardName(e.target.value)}
+              className="bg-neutral-900 text-white p-2 rounded-md w-full mt-2"
+            />
+          </div>
+
+          <div className="mb-4">
+            <p className="text-white">Data de Expiração (MM/YY)</p>
+            <input
+              type="text"
+              value={expiration}
+              onChange={handleExpirationChange}
+              className="bg-neutral-900 text-white p-2 rounded-md w-full mt-2"
+            />
+          </div>
+
+          <div className="mb-4">
+            <p className="text-white">CVV</p>
+            <input
+              type="text"
+              value={cvv}
+              onChange={handleCvvChange}
+              className="bg-neutral-900 text-white p-2 rounded-md w-full mt-2"
+            />
+          </div>
+
+          <button
+            type="button"
+            onClick={handleNewCreditCard}
+            onKeyDown={handleKeyDown}
+            className="text-white py-2 px-4 bg-red-800 rounded hover:bg-red-900 transition ease-in-out hover:scale-105 duration-300"
+          >
+            {isLoading ? <LoadingSpinnerButton /> : "Criar Cartão"}
+          </button>
         </form>
       </div>
     </div>

@@ -155,7 +155,7 @@ export function SubscriptionWarningPage() {
       />
 
       <div className="relative flex justify-center items-center h-[90vh]">
-        <div className="text-white text-xl">
+        <div className="text-white text-2xl px-10">
           <h1>Você ainda não é um assinante D:</h1>
           <p>
             Para ter acesso aos filmes você precisa escolher um{" "}
@@ -168,7 +168,7 @@ export function SubscriptionWarningPage() {
 
       {subModalOpen && (
         <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-75">
-          <div className="absolute bg-black border-2 text-white w-[50vw] p-7 rounded-lg z-10 flex flex-col animate-slide-down">
+          <div className="absolute bg-black border-2 text-white w-[60vw] lg:w-[50vw] p-7 rounded-lg z-10 flex flex-col animate-slide-down">
             <div className="self-end">
               <X
                 className="cursor-pointer transition ease-in-out hover:scale-110 duration-300"
@@ -176,31 +176,47 @@ export function SubscriptionWarningPage() {
               />
             </div>
 
-            <div className="flex flex-col gap-10">
-              <h1 className="text-center text-3xl font-bold">
+            <div className="flex flex-col">
+              <h1 className="text-center text-2xl lg:text-3xl font-bold mb-5">
                 Escolha um plano
               </h1>
-              <ul className="flex gap-5 justify-around pb-5">
-                {subscriptions.map((subscription) => (
-                  <li
-                    key={subscription.id}
-                    className="h-full flex flex-col gap-5 p-5 text-lg border-2 rounded bg-neutral-700 transition ease-in-out delay-150 hover:scale-105 duration-300"
-                  >
-                    <p className="text-2xl">{subscription.name}</p>
-                    <p>{`R$ ${subscription.price}`}</p>
 
-                    {subscription.benefits.map((benefit, index) => (
-                      <p key={index}>{benefit}</p>
-                    ))}
-                    <button
-                      className="text-white py-2 px-4 bg-red-800 rounded hover:bg-red-900 transition ease-in-out hover:scale-105 duration-300"
-                      onClick={() => handleSubscriptionSelection(subscription)}
+              <div className="pb-5 md:pr-5 overflow-auto scrollbar-none md:scrollbar-thin scrollbar-thumb-neutral-500 scrollbar-track-transparent">
+                <ul className="max-h-[70vh] flex flex-col  lg:flex-row gap-10">
+                  {subscriptions.map((subscription) => (
+                    <li
+                      key={subscription.id}
+                      className="flex flex-col gap-5 justify-between py-5 px-5 border-2 rounded bg-neutral-700 relative"
                     >
-                      Assinar
-                    </button>
-                  </li>
-                ))}
-              </ul>
+                      <p className="text-xl md:text-2xl text-center break-words">
+                        <span className="font-bold text-red-500">
+                          {subscription.name}
+                        </span>
+                        &nbsp;Subscription
+                      </p>
+
+                      <div className="flex flex-col gap-2">
+                        {subscription.benefits.map((benefit, index) => (
+                          <p key={index}>{benefit}</p>
+                        ))}
+                      </div>
+
+                      <div className="flex flex-col items-center">
+                        <p className="text-center">{`R$ ${subscription.price}`}</p>
+
+                        <button
+                          className="text-white py-1 px-3 md:py-2  bg-red-800 rounded hover:bg-red-900 transition ease-in-out hover:scale-105 duration-300"
+                          onClick={() =>
+                            handleSubscriptionSelection(subscription)
+                          }
+                        >
+                          Assinar
+                        </button>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
           </div>
         </div>
@@ -208,7 +224,7 @@ export function SubscriptionWarningPage() {
 
       {paymentModalOpen && (
         <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-75">
-          <div className="absolute bg-black border-2 text-white w-[40vw] p-2 rounded-lg z-10 flex flex-col animate-slide-down">
+          <div className="absolute bg-black border-2 text-white w-[50vw] lg:w-[40vw] p-2 rounded-lg z-10 flex flex-col animate-slide-down">
             <div className="self-end">
               <X
                 className="cursor-pointer transition ease-in-out hover:scale-110 duration-300"
@@ -217,14 +233,14 @@ export function SubscriptionWarningPage() {
             </div>
 
             <div className="flex flex-col gap-7">
-              <h1 className="text-center text-3xl font-bold">
+              <h1 className="text-center px-4 text-xl lg:text-2xl font-bold">
                 Formas de pagamento
               </h1>
 
-              <div className="flex flex-col gap-5 p-5 m-5 border rounded bg-neutral-800">
-                <div className="flex gap-5 justify-around">
+              <div className="flex flex-col mx-5 mb-5 border rounded bg-neutral-800">
+                <div className="flex flex-col p-5 md:flex-row gap-5 justify-around">
                   <button
-                    className="text-white py-2 px-4 bg-red-800 rounded hover:bg-red-900 transition ease-in-out duration-300"
+                    className="text-white py-1 md:py-2 md:px-4 bg-red-800 rounded hover:bg-red-900 transition ease-in-out duration-300"
                     onClick={() => {
                       setShowCreditCards(true);
                     }}
@@ -233,7 +249,7 @@ export function SubscriptionWarningPage() {
                   </button>
 
                   <button
-                    className="text-white py-2 px-4 bg-red-800 rounded hover:bg-red-900 transition ease-in-out duration-300"
+                    className="text-white py-1 md:py-2 md:px-4 bg-red-800 rounded hover:bg-red-900 transition ease-in-out duration-300"
                     onClick={() => {
                       setShowCreditCards(true);
                     }}
@@ -257,7 +273,7 @@ export function SubscriptionWarningPage() {
                     ))}
 
                     <button
-                      className="text-white py-2 px-4 bg-red-800 rounded hover:bg-red-900 transition ease-in-out duration-300"
+                      className="text-white py-1 px-3 md:py-2 md:px-4 bg-red-800 rounded hover:bg-red-900 transition ease-in-out duration-300"
                       onClick={openModal}
                     >
                       Adicionar Cartão
@@ -266,10 +282,10 @@ export function SubscriptionWarningPage() {
                 ) : null}
 
                 {showCreditCards && userCreditCards.length === 0 ? (
-                  <div className="text-center">
+                  <div className="text-center p-5 border-t">
                     <p>Você ainda não possui cartões de crédito cadastrados.</p>
                     <button
-                      className="text-white py-2 px-4 mt-4 bg-red-800 rounded hover:bg-red-900 transition ease-in-out hover:scale-105 duration-300"
+                      className="text-white py-1 px-3 md:py-2 md:px-4 mt-4 bg-red-800 rounded hover:bg-red-900 transition ease-in-out hover:scale-105 duration-300"
                       onClick={openModal}
                     >
                       Adicionar Cartão
@@ -278,7 +294,7 @@ export function SubscriptionWarningPage() {
                 ) : null}
 
                 {isModalOpen && (
-                  <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-75 z-50">
+                  <div className="fixed top-0 left-0 px-5 w-full h-full flex justify-center items-center bg-black bg-opacity-75 z-50">
                     <div className="bg-black border-2 rounded-lg p-5 relative">
                       <span
                         className="close cursor-pointer text-white absolute top-2 right-2"

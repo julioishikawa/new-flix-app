@@ -20,7 +20,8 @@ interface Props {
 }
 
 export function Header({ filterMoviesByCategory }: Props) {
-  const { signOut, isAdmin, userId, userAvatar, userName } = useAuth();
+  const { signOut, isAdmin, hasSubscription, userId, userAvatar, userName } =
+    useAuth();
   const { searchMovies, movieSought } = useMovies();
 
   const avatarURL =
@@ -53,8 +54,13 @@ export function Header({ filterMoviesByCategory }: Props) {
   };
 
   const handleCategoryClick = (category: string) => {
-    filterMoviesByCategory(category);
+    if (category === "Todos") {
+      filterMoviesByCategory("Todos");
+    } else {
+      filterMoviesByCategory(category);
+    }
     setShowMenu(false);
+    setShowCategories(false);
   };
 
   useEffect(() => {
@@ -71,7 +77,7 @@ export function Header({ filterMoviesByCategory }: Props) {
   }, []);
 
   return (
-    <div className="flex items-center justify-between gap-4 px-6 md:px-8 lg:px-10 py-3 bg-neutral-800">
+    <div className="flex items-center justify-between gap-5 px-6 md:px-8 lg:px-10 py-3 bg-neutral-800">
       {!isMobile && (
         <Link className="text-white" to="/">
           ICONE
@@ -91,7 +97,7 @@ export function Header({ filterMoviesByCategory }: Props) {
 
       {isMobile && showMenu && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-start justify-start">
-          <div className="bg-neutral-900 w-1/3 h-full p-6 flex flex-col gap-5">
+          <div className="bg-neutral-900 w-1/3 h-full p-6 flex flex-col gap-5 animate-slide-right">
             <div className="flex justify-end">
               <button onClick={toggleMenu}>
                 <X
@@ -101,99 +107,116 @@ export function Header({ filterMoviesByCategory }: Props) {
               </button>
             </div>
 
-            <div className="relative">
-              <button
-                onClick={toggleCategories}
-                className="text-white hover:text-gray-300 focus:outline-none"
-              >
-                Categorias
-                <span className="ml-1">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className={`h-4 w-4 inline-block ${
-                      showCategories ? "transform rotate-180" : ""
-                    }`}
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M19 9l-7 7-7-7"
-                    />
-                  </svg>
-                </span>
-              </button>
-
-              {showCategories && (
-                <div className="flex flex-col absolute top-full left-0 bg-neutral-800 rounded shadow-lg py-2 px-4 mt-1 z-10 animate-opacity-down">
-                  <button
-                    onClick={() => handleCategoryClick("Ação")}
-                    className="block text-white hover:text-gray-300 py-1"
-                  >
-                    Ação
-                  </button>
-                  <button
-                    onClick={() => handleCategoryClick("Comédia")}
-                    className="block text-white hover:text-gray-300 py-1"
-                  >
-                    Comédia
-                  </button>
-                  <button
-                    onClick={() => handleCategoryClick("Drama")}
-                    className="block text-white hover:text-gray-300 py-1"
-                  >
-                    Drama
-                  </button>
-                  <button
-                    onClick={() => handleCategoryClick("Ficção Científica")}
-                    className="block text-white hover:text-gray-300 py-1"
-                  >
-                    Ficção Científica
-                  </button>
-                  <button
-                    onClick={() => handleCategoryClick("Suspense")}
-                    className="block text-white hover:text-gray-300 py-1"
-                  >
-                    Suspense
-                  </button>
-                  <button
-                    onClick={() => handleCategoryClick("Terror")}
-                    className="block text-white hover:text-gray-300 py-1"
-                  >
-                    Terror
-                  </button>
-                </div>
-              )}
-            </div>
-
-            {isAdmin && (
-              <div>
-                <Link
-                  to="/newmovie"
-                  className="text-white hover:text-gray-300 block py-1"
+            {hasSubscription && (
+              <div className="relative">
+                <button
+                  onClick={toggleCategories}
+                  className="text-white hover:text-gray-300 focus:outline-none"
                 >
-                  Novo Filme
-                </Link>
+                  Categorias
+                  <span className="ml-1">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className={`h-4 w-4 inline-block ${
+                        showCategories ? "transform rotate-180" : ""
+                      }`}
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M19 9l-7 7-7-7"
+                      />
+                    </svg>
+                  </span>
+                </button>
+
+                {showCategories && (
+                  <div className="flex flex-col absolute top-full left-0 bg-neutral-800 rounded shadow-lg py-2 px-4 mt-1 z-10 animate-opacity-down">
+                    <button
+                      onClick={() => handleCategoryClick("Todos")}
+                      className="block text-white hover:text-gray-300 py-1"
+                    >
+                      Todos
+                    </button>
+
+                    <button
+                      onClick={() => handleCategoryClick("Ação")}
+                      className="block text-white hover:text-gray-300 py-1"
+                    >
+                      Ação
+                    </button>
+
+                    <button
+                      onClick={() => handleCategoryClick("Comédia")}
+                      className="block text-white hover:text-gray-300 py-1"
+                    >
+                      Comédia
+                    </button>
+
+                    <button
+                      onClick={() => handleCategoryClick("Drama")}
+                      className="block text-white hover:text-gray-300 py-1"
+                    >
+                      Drama
+                    </button>
+
+                    <button
+                      onClick={() => handleCategoryClick("Ficção Científica")}
+                      className="block text-white hover:text-gray-300 py-1"
+                    >
+                      Ficção Científica
+                    </button>
+
+                    <button
+                      onClick={() => handleCategoryClick("Suspense")}
+                      className="block text-white hover:text-gray-300 py-1"
+                    >
+                      Suspense
+                    </button>
+
+                    <button
+                      onClick={() => handleCategoryClick("Terror")}
+                      className="block text-white hover:text-gray-300 py-1"
+                    >
+                      Terror
+                    </button>
+                  </div>
+                )}
               </div>
             )}
 
-            <div>
+            {isAdmin && (
               <Link
-                to={"#"}
+                to="/newmovie"
                 className="text-white hover:text-gray-300 block py-1"
-                onClick={signOut}
               >
-                Sair
+                Novo Filme
               </Link>
-            </div>
+            )}
+
+            <Link
+              to={`/profile/${userId}`}
+              className="text-white hover:text-gray-300 block py-1"
+            >
+              Perfil
+            </Link>
+
+            <Link
+              to={"#"}
+              className="text-white hover:text-gray-300 block py-1"
+              onClick={signOut}
+            >
+              Sair
+            </Link>
           </div>
         </div>
       )}
 
-      {!isMobile && (
+      {!isMobile && hasSubscription && (
         <div className="relative">
           <button
             onClick={toggleCategories}
@@ -223,35 +246,47 @@ export function Header({ filterMoviesByCategory }: Props) {
           {showCategories && (
             <div className="flex flex-col absolute top-full left-0 bg-neutral-800 rounded shadow-lg py-2 px-4 mt-1 z-10 animate-opacity-down">
               <button
+                onClick={() => handleCategoryClick("Todos")}
+                className="block text-white hover:text-gray-300 py-1"
+              >
+                Todos
+              </button>
+
+              <button
                 onClick={() => handleCategoryClick("Ação")}
                 className="block text-white hover:text-gray-300 py-1"
               >
                 Ação
               </button>
+
               <button
                 onClick={() => handleCategoryClick("Comédia")}
                 className="block text-white hover:text-gray-300 py-1"
               >
                 Comédia
               </button>
+
               <button
                 onClick={() => handleCategoryClick("Drama")}
                 className="block text-white hover:text-gray-300 py-1"
               >
                 Drama
               </button>
+
               <button
                 onClick={() => handleCategoryClick("Ficção Científica")}
                 className="block text-white hover:text-gray-300 py-1"
               >
                 Ficção Científica
               </button>
+
               <button
                 onClick={() => handleCategoryClick("Suspense")}
                 className="block text-white hover:text-gray-300 py-1"
               >
                 Suspense
               </button>
+
               <button
                 onClick={() => handleCategoryClick("Terror")}
                 className="block text-white hover:text-gray-300 py-1"
@@ -263,7 +298,7 @@ export function Header({ filterMoviesByCategory }: Props) {
         </div>
       )}
 
-      <div className="w-4/5 md:w-2/5 lg:w-1/3 relative flex items-center gap-2 border-2 rounded border-white p-1">
+      <div className="w-4/5 md:w-2/5 lg:w-3/6 relative flex items-center gap-2 border-2 rounded border-white p-1">
         <span>
           <SearchIcon className="h-5 w-5 text-white" />
         </span>
@@ -293,9 +328,9 @@ export function Header({ filterMoviesByCategory }: Props) {
         </Link>
       )}
 
-      {!isMobile && (
-        <div className="flex gap-5 items-center">
-          {!isNotebook && (
+      <div className="flex gap-4 md:gap-10 items-center">
+        <div className="flex gap-3 items-center">
+          {!isMobile && !isNotebook && (
             <h1 className="text-white">
               Bem vindo, <br />{" "}
               <Link to={`/profile/${userId}`}>
@@ -306,7 +341,7 @@ export function Header({ filterMoviesByCategory }: Props) {
             </h1>
           )}
 
-          <Link to={`/profile/${userId}`}>
+          <Link to={`/profile/${userId}`} className="min-w-14">
             <img
               src={avatarURL}
               alt={`${userName} photo`}
@@ -314,14 +349,14 @@ export function Header({ filterMoviesByCategory }: Props) {
             />
           </Link>
         </div>
-      )}
 
-      <button
-        onClick={signOut}
-        className="text-white transition ease-in-out hover:scale-110 duration-300"
-      >
-        <LogOutIcon size={20} />
-      </button>
+        <button
+          onClick={signOut}
+          className="text-white transition ease-in-out hover:scale-110 duration-300"
+        >
+          <LogOutIcon size={20} />
+        </button>
+      </div>
     </div>
   );
 }

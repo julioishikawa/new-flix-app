@@ -79,7 +79,7 @@ export default function MovieCard({ movie }: MovieCardProps) {
       </Link>
 
       {window.innerWidth >= 768 && showVideo && (
-        <div className="min-w-80 min-h-24 animate-opacity-down">
+        <div className="min-w-80 min-h-44 animate-opacity-down">
           <div className="absolute -inset-1 flex flex-col bg-neutral-900 rounded">
             <iframe
               className="min-w-80 min-h-56"

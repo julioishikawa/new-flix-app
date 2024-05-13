@@ -27,70 +27,96 @@ export function Home() {
   const [terrorMovies, setTerrorMovies] = useState<Movie[]>([]);
   const [moviesLoaded, setMoviesLoaded] = useState(false);
 
-  const filterMoviesByCategory = (category: string) => {
-    const filteredMovies = movies.filter((movie: Movie) =>
-      movie.genres.includes(category)
-    );
+  function filterMoviesByCategory(category: string) {
+    if (category === "Todos") {
+      // Preencher todas as categorias com todos os filmes
+      const allCategories: { [key: string]: Movie[] } = {
+        Ação: movies.filter((movie: Movie) => movie.genres.includes("Ação")),
 
-    switch (category) {
-      case "Ação":
-        setActionMovies(filteredMovies);
-        setComedyMovies([]);
-        setDramaMovies([]);
-        setScifiMovies([]);
-        setThrillerMovies([]);
-        setTerrorMovies([]);
-        break;
-      case "Comédia":
-        setActionMovies([]);
-        setComedyMovies(filteredMovies);
-        setDramaMovies([]);
-        setScifiMovies([]);
-        setThrillerMovies([]);
-        setTerrorMovies([]);
-        break;
-      case "Drama":
-        setActionMovies([]);
-        setComedyMovies([]);
-        setDramaMovies(filteredMovies);
-        setScifiMovies([]);
-        setThrillerMovies([]);
-        setTerrorMovies([]);
-        break;
-      case "Ficção Científica":
-        setActionMovies([]);
-        setComedyMovies([]);
-        setDramaMovies([]);
-        setScifiMovies(filteredMovies);
-        setThrillerMovies([]);
-        setTerrorMovies([]);
-        break;
-      case "Suspense":
-        setActionMovies([]);
-        setComedyMovies([]);
-        setDramaMovies([]);
-        setScifiMovies([]);
-        setThrillerMovies(filteredMovies);
-        setTerrorMovies([]);
-        break;
-      case "Terror":
-        setActionMovies([]);
-        setComedyMovies([]);
-        setDramaMovies([]);
-        setScifiMovies([]);
-        setThrillerMovies([]);
-        setTerrorMovies(filteredMovies);
-        break;
-      default:
-        setActionMovies([]);
-        setComedyMovies([]);
-        setDramaMovies([]);
-        setScifiMovies([]);
-        setThrillerMovies([]);
-        setTerrorMovies([]);
-        break;
+        Comédia: movies.filter((movie: Movie) =>
+          movie.genres.includes("Comédia")
+        ),
+
+        Drama: movies.filter((movie: Movie) => movie.genres.includes("Drama")),
+
+        FiccaoCientifica: movies.filter((movie: Movie) =>
+          movie.genres.includes("Ficção Científica")
+        ),
+
+        Suspense: movies.filter((movie: Movie) =>
+          movie.genres.includes("Suspense")
+        ),
+
+        Terror: movies.filter((movie: Movie) =>
+          movie.genres.includes("Terror")
+        ),
+      };
+
+      // Definir os estados para cada categoria
+      setActionMovies(allCategories["Ação"]);
+      setComedyMovies(allCategories["Comédia"]);
+      setDramaMovies(allCategories["Drama"]);
+      setScifiMovies(allCategories["FiccaoCientifica"]);
+      setThrillerMovies(allCategories["Suspense"]);
+      setTerrorMovies(allCategories["Terror"]);
+    } else {
+      // Filtrar os filmes por categoria
+      const filteredMovies = movies.filter((movie: Movie) =>
+        movie.genres.includes(category)
+      );
+
+      switch (category) {
+        case "Ação":
+          setActionMovies(filteredMovies);
+          setComedyMovies([]);
+          setDramaMovies([]);
+          setScifiMovies([]);
+          setThrillerMovies([]);
+          setTerrorMovies([]);
+          break;
+        case "Comédia":
+          setActionMovies([]);
+          setComedyMovies(filteredMovies);
+          setDramaMovies([]);
+          setScifiMovies([]);
+          setThrillerMovies([]);
+          setTerrorMovies([]);
+          break;
+        case "Drama":
+          setActionMovies([]);
+          setComedyMovies([]);
+          setDramaMovies(filteredMovies);
+          setScifiMovies([]);
+          setThrillerMovies([]);
+          setTerrorMovies([]);
+          break;
+        case "Ficção Científica":
+          setActionMovies([]);
+          setComedyMovies([]);
+          setDramaMovies([]);
+          setScifiMovies(filteredMovies);
+          setThrillerMovies([]);
+          setTerrorMovies([]);
+          break;
+        case "Suspense":
+          setActionMovies([]);
+          setComedyMovies([]);
+          setDramaMovies([]);
+          setScifiMovies([]);
+          setThrillerMovies(filteredMovies);
+          setTerrorMovies([]);
+          break;
+        case "Terror":
+          setActionMovies([]);
+          setComedyMovies([]);
+          setDramaMovies([]);
+          setScifiMovies([]);
+          setThrillerMovies([]);
+          setTerrorMovies(filteredMovies);
+          break;
+      }
     }
-  };
+  }
 
   useEffect(() => {
     // Filtrar os filmes para cada categoria individualmente
