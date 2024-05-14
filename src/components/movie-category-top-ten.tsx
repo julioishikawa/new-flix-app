@@ -4,7 +4,7 @@ import "swiper/css/free-mode";
 import "swiper/css/navigation";
 import { Swiper, SwiperSlide } from "swiper/react";
 
-import MovieCard from "./movie-card";
+import MovieCardTopTen from "./movie-card-top-ten";
 
 interface Movie {
   id: string;
@@ -22,7 +22,7 @@ interface CategoryProps {
   movies: Movie[];
 }
 
-export function MovieCategory({ title, movies }: CategoryProps) {
+export function MovieCategoryTopTen({ title, movies }: CategoryProps) {
   const swiperRef = useRef<any>(null);
   const [isNavVisible, setIsNavVisible] = useState(false);
   const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
@@ -65,7 +65,7 @@ export function MovieCategory({ title, movies }: CategoryProps) {
 
       <div className="px-14 relative z-0">
         <Swiper
-          className="p-6 z-0 bg-neutral-950 rounded"
+          className="pt-6 px-6 pb-4 md:p-6  z-0 bg-neutral-950 rounded"
           wrapperClass="min-w-96 z-0"
           slidesPerView="auto"
           freeMode={true}
@@ -78,7 +78,7 @@ export function MovieCategory({ title, movies }: CategoryProps) {
                 index !== movies.length - 1 ? "mr-12" : ""
               }`}
             >
-              <MovieCard movie={movie} />
+              <MovieCardTopTen movie={movie} position={index + 1} />
             </SwiperSlide>
           ))}
         </Swiper>

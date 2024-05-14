@@ -68,7 +68,7 @@ export function NewCreditCard() {
         cvv: parseInt(cvv), // Convertendo CVV para número
       };
 
-      await api.post(`/users/${userId}/newcc`, creditCardData);
+      await api.post(`/users/${userId}/new-cc`, creditCardData);
 
       setIsLoading(false);
       toast.success("Cartão de crédito criado com sucesso!");

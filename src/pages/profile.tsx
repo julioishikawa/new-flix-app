@@ -79,7 +79,7 @@ export function Profile() {
 
     async function fetchUserCreditCards() {
       try {
-        const response = await api.get(`/users/${userId}/creditcards`);
+        const response = await api.get(`/users/${userId}/credit-cards`);
         const cards = response.data.map((card: any) => ({
           id: card.id,
           cardNumber: card.cardNumber,

@@ -60,7 +60,7 @@ export function UpdateMovie() {
         content: { URL: contentURL },
       };
 
-      await api.put(`/movielist/editmovie/${movieId}`, movieData);
+      await api.put(`/movielist/edit-movie/${movieId}`, movieData);
 
       if (image) {
         const imageFormData = handleImage();

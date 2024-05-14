@@ -25,7 +25,6 @@ interface Movie {
   content: {
     URL: string;
   };
-  rating: number;
 }
 
 export function FilmPlayer() {
@@ -35,6 +34,7 @@ export function FilmPlayer() {
 
   const [movie, setMovie] = useState<Movie | null>(null);
   const [ratingSelected, setRatingSelected] = useState<number | null>(null);
+  const [vipVotes, setVipVotes] = useState<number | null>(0);
   const [showModal, setShowModal] = useState(false);
 
   const navigate = useNavigate();

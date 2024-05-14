@@ -107,87 +107,95 @@ export function Header({ filterMoviesByCategory }: Props) {
               </button>
             </div>
 
-            {hasSubscription && (
-              <div className="relative">
-                <button
-                  onClick={toggleCategories}
-                  className="text-white hover:text-gray-300 focus:outline-none"
-                >
-                  Categorias
-                  <span className="ml-1">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className={`h-4 w-4 inline-block ${
-                        showCategories ? "transform rotate-180" : ""
-                      }`}
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M19 9l-7 7-7-7"
-                      />
-                    </svg>
-                  </span>
-                </button>
+            {hasSubscription ||
+              (isAdmin && (
+                <div className="relative">
+                  <button
+                    onClick={toggleCategories}
+                    className="text-white hover:text-gray-300 focus:outline-none"
+                  >
+                    Categorias
+                    <span className="ml-1">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className={`h-4 w-4 inline-block ${
+                          showCategories ? "transform rotate-180" : ""
+                        }`}
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M19 9l-7 7-7-7"
+                        />
+                      </svg>
+                    </span>
+                  </button>
 
-                {showCategories && (
-                  <div className="flex flex-col absolute top-full left-0 bg-neutral-800 rounded shadow-lg py-2 px-4 mt-1 z-10 animate-opacity-down">
-                    <button
-                      onClick={() => handleCategoryClick("Todos")}
-                      className="block text-white hover:text-gray-300 py-1"
-                    >
-                      Todos
-                    </button>
+                  {showCategories && (
+                    <div className="flex flex-col absolute top-full left-0 bg-neutral-800 rounded shadow-lg py-2 px-4 mt-1 z-10 animate-opacity-down">
+                      <button
+                        onClick={() => handleCategoryClick("Todos")}
+                        className="block text-white hover:text-gray-300 py-1"
+                      >
+                        Todos
+                      </button>
 
-                    <button
-                      onClick={() => handleCategoryClick("Ação")}
-                      className="block text-white hover:text-gray-300 py-1"
-                    >
-                      Ação
-                    </button>
+                      <button
+                        onClick={() => handleCategoryClick("Ação")}
+                        className="block text-white hover:text-gray-300 py-1"
+                      >
+                        Ação
+                      </button>
 
-                    <button
-                      onClick={() => handleCategoryClick("Comédia")}
-                      className="block text-white hover:text-gray-300 py-1"
-                    >
-                      Comédia
-                    </button>
+                      <button
+                        onClick={() => handleCategoryClick("Comédia")}
+                        className="block text-white hover:text-gray-300 py-1"
+                      >
+                        Comédia
+                      </button>
 
-                    <button
-                      onClick={() => handleCategoryClick("Drama")}
-                      className="block text-white hover:text-gray-300 py-1"
-                    >
-                      Drama
-                    </button>
+                      <button
+                        onClick={() => handleCategoryClick("Drama")}
+                        className="block text-white hover:text-gray-300 py-1"
+                      >
+                        Drama
+                      </button>
 
-                    <button
-                      onClick={() => handleCategoryClick("Ficção Científica")}
-                      className="block text-white hover:text-gray-300 py-1"
-                    >
-                      Ficção Científica
-                    </button>
+                      <button
+                        onClick={() => handleCategoryClick("Ficção Científica")}
+                        className="block text-white hover:text-gray-300 py-1"
+                      >
+                        Ficção Científica
+                      </button>
 
-                    <button
-                      onClick={() => handleCategoryClick("Suspense")}
-                      className="block text-white hover:text-gray-300 py-1"
-                    >
-                      Suspense
-                    </button>
+                      <button
+                        onClick={() => handleCategoryClick("Suspense")}
+                        className="block text-white hover:text-gray-300 py-1"
+                      >
+                        Suspense
+                      </button>
 
-                    <button
-                      onClick={() => handleCategoryClick("Terror")}
-                      className="block text-white hover:text-gray-300 py-1"
-                    >
-                      Terror
-                    </button>
-                  </div>
-                )}
-              </div>
-            )}
+                      <button
+                        onClick={() => handleCategoryClick("Terror")}
+                        className="block text-white hover:text-gray-300 py-1"
+                      >
+                        Terror
+                      </button>
+
+                      <button
+                        onClick={() => handleCategoryClick("Top 10")}
+                        className="block text-white hover:text-gray-300 py-1"
+                      >
+                        Top 10
+                      </button>
+                    </div>
+                  )}
+                </div>
+              ))}
 
             {isAdmin && (
               <Link
@@ -216,87 +224,95 @@ export function Header({ filterMoviesByCategory }: Props) {
         </div>
       )}
 
-      {!isMobile && hasSubscription && (
-        <div className="relative">
-          <button
-            onClick={toggleCategories}
-            className="text-white hover:text-gray-300 focus:outline-none"
-          >
-            Categorias
-            <span className="ml-1">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className={`h-4 w-4 inline-block ${
-                  showCategories ? "transform rotate-180" : ""
-                }`}
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M19 9l-7 7-7-7"
-                />
-              </svg>
-            </span>
-          </button>
+      {(!isMobile && hasSubscription) ||
+        (!isMobile && isAdmin && (
+          <div className="relative">
+            <button
+              onClick={toggleCategories}
+              className="text-white hover:text-gray-300 focus:outline-none"
+            >
+              Categorias
+              <span className="ml-1">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className={`h-4 w-4 inline-block ${
+                    showCategories ? "transform rotate-180" : ""
+                  }`}
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+              </span>
+            </button>
 
-          {showCategories && (
-            <div className="flex flex-col absolute top-full left-0 bg-neutral-800 rounded shadow-lg py-2 px-4 mt-1 z-10 animate-opacity-down">
-              <button
-                onClick={() => handleCategoryClick("Todos")}
-                className="block text-white hover:text-gray-300 py-1"
-              >
-                Todos
-              </button>
+            {showCategories && (
+              <div className="flex flex-col absolute top-full left-0 bg-neutral-800 rounded shadow-lg py-2 px-4 mt-1 z-10 animate-opacity-down">
+                <button
+                  onClick={() => handleCategoryClick("Todos")}
+                  className="block text-white hover:text-gray-300 py-1"
+                >
+                  Todos
+                </button>
 
-              <button
-                onClick={() => handleCategoryClick("Ação")}
-                className="block text-white hover:text-gray-300 py-1"
-              >
-                Ação
-              </button>
+                <button
+                  onClick={() => handleCategoryClick("Ação")}
+                  className="block text-white hover:text-gray-300 py-1"
+                >
+                  Ação
+                </button>
 
-              <button
-                onClick={() => handleCategoryClick("Comédia")}
-                className="block text-white hover:text-gray-300 py-1"
-              >
-                Comédia
-              </button>
+                <button
+                  onClick={() => handleCategoryClick("Comédia")}
+                  className="block text-white hover:text-gray-300 py-1"
+                >
+                  Comédia
+                </button>
 
-              <button
-                onClick={() => handleCategoryClick("Drama")}
-                className="block text-white hover:text-gray-300 py-1"
-              >
-                Drama
-              </button>
+                <button
+                  onClick={() => handleCategoryClick("Drama")}
+                  className="block text-white hover:text-gray-300 py-1"
+                >
+                  Drama
+                </button>
 
-              <button
-                onClick={() => handleCategoryClick("Ficção Científica")}
-                className="block text-white hover:text-gray-300 py-1"
-              >
-                Ficção Científica
-              </button>
+                <button
+                  onClick={() => handleCategoryClick("Ficção Científica")}
+                  className="block text-white hover:text-gray-300 py-1"
+                >
+                  Ficção Científica
+                </button>
 
-              <button
-                onClick={() => handleCategoryClick("Suspense")}
-                className="block text-white hover:text-gray-300 py-1"
-              >
-                Suspense
-              </button>
+                <button
+                  onClick={() => handleCategoryClick("Suspense")}
+                  className="block text-white hover:text-gray-300 py-1"
+                >
+                  Suspense
+                </button>
 
-              <button
-                onClick={() => handleCategoryClick("Terror")}
-                className="block text-white hover:text-gray-300 py-1"
-              >
-                Terror
-              </button>
-            </div>
-          )}
-        </div>
-      )}
+                <button
+                  onClick={() => handleCategoryClick("Terror")}
+                  className="block text-white hover:text-gray-300 py-1"
+                >
+                  Terror
+                </button>
+
+                <button
+                  onClick={() => handleCategoryClick("Top 10")}
+                  className="block text-white hover:text-gray-300 py-1"
+                >
+                  Top 10
+                </button>
+              </div>
+            )}
+          </div>
+        ))}
 
       <div className="w-4/5 md:w-2/5 lg:w-3/6 relative flex items-center gap-2 border-2 rounded border-white p-1">
         <span>

@@ -4,7 +4,7 @@ import { useAuth } from "../hooks/auth";
 import { MoviesProvider } from "../hooks/movies";
 import { Home } from "../pages/home";
 import { NewMovie } from "../pages/new-movie";
-import { SubscriptionWarningPage } from "../pages/subscription-warn-page";
+import { SubscriptionWarningPage } from "../pages/subscription-warn";
 import { FilmPlayer } from "../pages/film-player";
 import { UpdateMovie } from "../pages/update-movie";
 import { UpdateProfile } from "../pages/update-profile";

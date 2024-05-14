@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useMovies } from "../hooks/movies";
 import { Header } from "../components/header";
 import { MovieCategory } from "../components/movie-category";
+import { MovieCategoryTopTen } from "../components/movie-category-top-ten";
 import { LoadingSpinner } from "../components/loading-spinner";
 
 interface Movie {
@@ -13,12 +14,13 @@ interface Movie {
   demo_content: {
     trailer_URL: string;
   };
-  rating: number;
+  vipVotes?: number;
 }
 
 export function Home() {
   const { movies } = useMovies();
 
+  const [topTenMovies, setTopTenMovies] = useState<Movie[]>([]);
   const [actionMovies, setActionMovies] = useState<Movie[]>([]);
   const [comedyMovies, setComedyMovies] = useState<Movie[]>([]);
   const [dramaMovies, setDramaMovies] = useState<Movie[]>([]);
@@ -29,6 +31,14 @@ export function Home() {
 
   function filterMoviesByCategory(category: string) {
     if (category === "Todos") {
+      // Filtrar os filmes que têm votos VIP
+      const topTenMoviesFiltered = movies
+        .filter((movie: Movie) => movie.vipVotes !== undefined)
+        .sort((a: Movie, b: Movie) => (a.vipVotes! > b.vipVotes! ? -1 : 1))
+        .slice(0, 10);
+
+      setTopTenMovies(topTenMoviesFiltered);
+
       // Preencher todas as categorias com todos os filmes
       const allCategories: { [key: string]: Movie[] } = {
         Ação: movies.filter((movie: Movie) => movie.genres.includes("Ação")),
@@ -59,6 +69,22 @@ export function Home() {
       setScifiMovies(allCategories["FiccaoCientifica"]);
       setThrillerMovies(allCategories["Suspense"]);
       setTerrorMovies(allCategories["Terror"]);
+    } else if (category === "Top 10") {
+      // Filtrar os filmes que têm votos VIP
+      const topTenMoviesFiltered = movies
+        .filter((movie: Movie) => movie.vipVotes !== undefined)
+        .sort((a: Movie, b: Movie) => (a.vipVotes! > b.vipVotes! ? -1 : 1))
+        .slice(0, 10);
+
+      setTopTenMovies(topTenMoviesFiltered);
+
+      // Limpar os estados das outras categorias
+      setActionMovies([]);
+      setComedyMovies([]);
+      setDramaMovies([]);
+      setScifiMovies([]);
+      setThrillerMovies([]);
+      setTerrorMovies([]);
     } else {
       // Filtrar os filmes por categoria
       const filteredMovies = movies.filter((movie: Movie) =>
@@ -66,7 +92,17 @@ export function Home() {
       );
 
       switch (category) {
+        case "Top 10":
+          setTopTenMovies(filteredMovies);
+          setActionMovies([]);
+          setComedyMovies([]);
+          setDramaMovies([]);
+          setScifiMovies([]);
+          setThrillerMovies([]);
+          setTerrorMovies([]);
+          break;
         case "Ação":
+          setTopTenMovies([]);
           setActionMovies(filteredMovies);
           setComedyMovies([]);
           setDramaMovies([]);
@@ -75,6 +111,7 @@ export function Home() {
           setTerrorMovies([]);
           break;
         case "Comédia":
+          setTopTenMovies([]);
           setActionMovies([]);
           setComedyMovies(filteredMovies);
           setDramaMovies([]);
@@ -83,6 +120,7 @@ export function Home() {
           setTerrorMovies([]);
           break;
         case "Drama":
+          setTopTenMovies([]);
           setActionMovies([]);
           setComedyMovies([]);
           setDramaMovies(filteredMovies);
@@ -91,6 +129,7 @@ export function Home() {
           setTerrorMovies([]);
           break;
         case "Ficção Científica":
+          setTopTenMovies([]);
           setActionMovies([]);
           setComedyMovies([]);
           setDramaMovies([]);
@@ -99,6 +138,7 @@ export function Home() {
           setTerrorMovies([]);
           break;
         case "Suspense":
+          setTopTenMovies([]);
           setActionMovies([]);
           setComedyMovies([]);
           setDramaMovies([]);
@@ -107,6 +147,7 @@ export function Home() {
           setTerrorMovies([]);
           break;
         case "Terror":
+          setTopTenMovies([]);
           setActionMovies([]);
           setComedyMovies([]);
           setDramaMovies([]);
@@ -147,6 +188,13 @@ export function Home() {
     setThrillerMovies(thrillerMoviesFiltered);
     setTerrorMovies(terrorMoviesFiltered);
 
+    const topTenMoviesFiltered = movies
+      .filter((movie: Movie) => movie.vipVotes !== undefined)
+      .sort((a: Movie, b: Movie) => (a.vipVotes! > b.vipVotes! ? -1 : 1))
+      .slice(0, 10);
+
+    setTopTenMovies(topTenMoviesFiltered);
+
     // Quando os filmes são carregados, marcamos como carregado
     if (movies.length > 0) {
       setMoviesLoaded(true);
@@ -166,6 +214,10 @@ export function Home() {
       <Header filterMoviesByCategory={filterMoviesByCategory} />
 
       <div className="p-10 animate-slide-right">
+        {topTenMovies.length > 0 && (
+          <MovieCategoryTopTen title="Top 10" movies={topTenMovies} />
+        )}
+
         {actionMovies.length > 0 && (
           <MovieCategory title="Ação" movies={actionMovies} />
         )}

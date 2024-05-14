@@ -119,7 +119,7 @@ export function SubscriptionWarningPage() {
 
   async function fetchUserCreditCards() {
     try {
-      const response = await api.get(`/users/${userId}/creditcards`);
+      const response = await api.get(`/users/${userId}/credit-cards`);
       setUserCreditCards(response.data); // Define os cartões de crédito do usuário
     } catch (error) {
       console.error("Erro ao obter os cartões de crédito do usuário:", error);
@@ -182,20 +182,20 @@ export function SubscriptionWarningPage() {
               </h1>
 
               <div className="pb-5 md:pr-5 overflow-auto scrollbar-none md:scrollbar-thin scrollbar-thumb-neutral-500 scrollbar-track-transparent">
-                <ul className="max-h-[70vh] flex flex-col  lg:flex-row gap-10">
+                <ul className="max-h-[70vh] flex flex-col lg:flex-row gap-10">
                   {subscriptions.map((subscription) => (
                     <li
                       key={subscription.id}
-                      className="flex flex-col gap-5 justify-between py-5 px-5 border-2 rounded bg-neutral-700 relative"
+                      className="flex flex-col lg:min-w-[300px] justify-between gap-5 py-5 px-5 border-2 rounded bg-neutral-700 relative"
                     >
-                      <p className="text-xl md:text-2xl text-center break-words">
-                        <span className="font-bold text-red-500">
-                          {subscription.name}
-                        </span>
-                        &nbsp;Subscription
-                      </p>
+                      <div className="flex flex-col gap-2 ">
+                        <p className="mb-4 text-xl md:text-2xl text-center break-words">
+                          <span className="font-bold text-red-500">
+                            {subscription.name}
+                          </span>
+                          &nbsp;Subscription
+                        </p>
 
-                      <div className="flex flex-col gap-2">
                         {subscription.benefits.map((benefit, index) => (
                           <p key={index}>{benefit}</p>
                         ))}

@@ -11,14 +11,18 @@ interface Movie {
   demo_content: {
     trailer_URL: string;
   };
-  rating?: number;
+  vipVotes?: number;
 }
 
-interface MovieCardProps {
+interface MovieCardTopTenProps {
   movie: Movie;
+  position: number;
 }
 
-export default function MovieCard({ movie }: MovieCardProps) {
+export default function MovieCardTopTen({
+  movie,
+  position,
+}: MovieCardTopTenProps) {
   const [showDescription, setShowDescription] = useState(false);
   const [showVideo, setShowVideo] = useState(false);
   const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
@@ -26,7 +30,7 @@ export default function MovieCard({ movie }: MovieCardProps) {
 
   const {
     demo_content: { trailer_URL },
-    rating,
+    vipVotes,
   } = movie;
 
   const imageUrl = `${api.defaults.baseURL}/movielist/${movie.id}/image`;
@@ -71,6 +75,12 @@ export default function MovieCard({ movie }: MovieCardProps) {
           } `}
         />
 
+        {(isSmallScreen || !showVideo) && (
+          <h1 className="text-white text-xl font-bold absolute -top-4 -left-4">
+            {position}
+          </h1>
+        )}
+
         {isSmallScreen && (
           <h2 className="mt-2 w-32 text-white text-lg text-center overflow-hidden whitespace-nowrap overflow-ellipsis">
             {movie.title}
@@ -97,8 +107,8 @@ export default function MovieCard({ movie }: MovieCardProps) {
                 </h1>
 
                 <h2 className="text-white text-lg px-4 pt-2">
-                  {rating
-                    ? `${rating}% gostaram desse filme`
+                  {vipVotes
+                    ? `${vipVotes}% dos VIPs gostaram desse filme`
                     : "Não foi classificado ainda."}
                 </h2>
 
