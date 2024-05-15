@@ -3,12 +3,12 @@ import { api } from "../services/api";
 import { toast } from "sonner";
 import { jwtDecode } from "jwt-decode";
 
-// Interfaces
 interface UserData {
   userId: string | null;
   token: string | null;
   isAdmin: boolean;
   hasSubscription: boolean;
+  isVIP: boolean;
   userName: string | null;
   userEmail: string | null;
   userAvatar: string | null;
@@ -18,6 +18,7 @@ interface JwtPayload {
   userId: string;
   isAdmin: boolean;
   hasSubscription: boolean;
+  isVIP: boolean;
   userName: string;
   userEmail: string;
   userAvatar: string;
@@ -37,6 +38,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     token: null,
     isAdmin: false,
     hasSubscription: false,
+    isVIP: false,
     userName: null,
     userEmail: null,
     userAvatar: null,
@@ -59,6 +61,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         token,
         isAdmin: decodedToken.isAdmin,
         hasSubscription: decodedToken.hasSubscription,
+        isVIP: decodedToken.isVIP,
         userName: decodedToken.userName,
         userEmail: decodedToken.userEmail,
         userAvatar: decodedToken.userAvatar,
@@ -84,6 +87,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       token: null,
       isAdmin: false,
       hasSubscription: false,
+      isVIP: false,
       userName: null,
       userEmail: null,
       userAvatar: null,
@@ -115,6 +119,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           token,
           isAdmin: decodedToken.isAdmin,
           hasSubscription: decodedToken.hasSubscription,
+          isVIP: decodedToken.isVIP,
           userName: decodedToken.userName,
           userEmail: decodedToken.userEmail,
           userAvatar: decodedToken.userAvatar,
@@ -126,6 +131,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           token: null,
           isAdmin: false,
           hasSubscription: false,
+          isVIP: false,
           userName: null,
           userEmail: null,
           userAvatar: null,
@@ -137,6 +143,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         token: null,
         isAdmin: false,
         hasSubscription: false,
+        isVIP: false,
         userName: null,
         userEmail: null,
         userAvatar: null,
@@ -154,6 +161,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         token: data.token,
         isAdmin: data.isAdmin,
         hasSubscription: data.hasSubscription,
+        isVIP: data.isVIP,
         userName: data.userName,
         userEmail: data.userEmail,
         userAvatar: data.userAvatar,

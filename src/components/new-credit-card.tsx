@@ -104,6 +104,7 @@ export function NewCreditCard() {
               type="text"
               value={cardNumber}
               onChange={handleCardNumberChange}
+              onKeyDown={handleKeyDown}
               className="bg-neutral-900 text-white p-2 rounded-md w-full mt-2"
             />
           </div>
@@ -114,6 +115,7 @@ export function NewCreditCard() {
               type="text"
               value={cardName}
               onChange={(e) => setCardName(e.target.value)}
+              onKeyDown={handleKeyDown}
               className="bg-neutral-900 text-white p-2 rounded-md w-full mt-2"
             />
           </div>
@@ -124,6 +126,7 @@ export function NewCreditCard() {
               type="text"
               value={expiration}
               onChange={handleExpirationChange}
+              onKeyDown={handleKeyDown}
               className="bg-neutral-900 text-white p-2 rounded-md w-full mt-2"
             />
           </div>
@@ -134,6 +137,7 @@ export function NewCreditCard() {
               type="text"
               value={cvv}
               onChange={handleCvvChange}
+              onKeyDown={handleKeyDown}
               className="bg-neutral-900 text-white p-2 rounded-md w-full mt-2"
             />
           </div>
@@ -141,7 +145,6 @@ export function NewCreditCard() {
           <button
             type="button"
             onClick={handleNewCreditCard}
-            onKeyDown={handleKeyDown}
             className="text-white py-2 px-4 bg-red-800 rounded hover:bg-red-900 transition ease-in-out hover:scale-105 duration-300"
           >
             {isLoading ? <LoadingSpinnerButton /> : "Criar Cartão"}

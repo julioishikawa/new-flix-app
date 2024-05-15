@@ -17,6 +17,7 @@ import {
   ThumbsUp,
   Heart,
   X,
+  Star,
 } from "lucide-react";
 
 interface Movie {
@@ -28,25 +29,42 @@ interface Movie {
 }
 
 export function FilmPlayer() {
-  const { isAdmin } = useAuth();
+  const { isAdmin, isVIP } = useAuth();
+
   const { getAllMovies } = useMovies();
   const { movieId } = useParams();
 
   const [movie, setMovie] = useState<Movie | null>(null);
   const [ratingSelected, setRatingSelected] = useState<number | null>(null);
-  const [vipVotes, setVipVotes] = useState<number | null>(0);
+  const [vipVoteSelected, setVipVoteSelected] = useState<number | null>(null);
+
+  const [showVIPModal, setShowVIPModal] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
   const navigate = useNavigate();
 
   const handleCloseModal = () => {
     setShowModal(false);
+    setShowVIPModal(false);
+    getAllMovies();
     navigate("/");
   };
 
   const handleOpenModal = () => {
     setShowModal(true);
   };
+
+  const handleOpenVIPModal = () => {
+    setShowVIPModal(true);
+  };
+
+  function handleVote() {
+    if (isVIP === true) {
+      handleOpenVIPModal();
+    } else {
+      handleOpenModal();
+    }
+  }
 
   async function handleRatingSubmit() {
     try {
@@ -57,12 +75,29 @@ export function FilmPlayer() {
         });
 
         setShowModal(false);
+        setShowVIPModal(false);
         getAllMovies();
         navigate("/");
         toast.success("Obrigado pela classificação!");
       }
     } catch (error) {
-      console.error("Erro ao enviar rating:", error);
+      console.error("Erro ao enviar a classificação:", error);
+    }
+  }
+
+  async function handleVIPVoteSubmit() {
+    try {
+      if (vipVoteSelected !== null) {
+        // Atualiza o filme com o novo rating
+        await api.post(`/movielist/${movieId}/vip-vote`, {
+          value: vipVoteSelected,
+        });
+
+        toast.success("Obrigado pela classificação VIP!");
+        handleOpenModal();
+      }
+    } catch (error) {
+      console.error("Erro ao enviar a classificação VIP:", error);
     }
   }
 
@@ -93,7 +128,7 @@ export function FilmPlayer() {
         <div className="flex justify-between h-full">
           <button
             className="text-white mb-4 transition ease-in-out hover:scale-110 duration-300"
-            onClick={handleOpenModal}
+            onClick={handleVote}
           >
             <ArrowLeft size="24" />
           </button>
@@ -121,6 +156,54 @@ export function FilmPlayer() {
             allowFullScreen
           ></iframe>
         </div>
+
+        {showVIPModal && (
+          <div className="fixed top-0 left-0 w-full h-full p-10 flex items-center justify-center bg-black bg-opacity-75">
+            <div className="relative flex flex-col gap-8 items-center bg-black p-8 rounded-lg border-2 animate-slide-right">
+              <button
+                className="absolute top-3 right-3 text-white"
+                onClick={handleOpenModal}
+              >
+                <X className="cursor-pointer transition ease-in-out hover:scale-110 duration-100" />
+              </button>
+
+              <h1 className="text-white text-lg text-center">
+                Obrigado por assistir, quantas estrelas esse filme merece? (as
+                estrelas influenciam no TOP 10)
+              </h1>
+
+              <div className="flex flex-wrap justify-center gap-5">
+                {[...Array(6)].map((_, index) => (
+                  <div key={index} className="text-white">
+                    <Star
+                      size="40"
+                      onClick={() =>
+                        setVipVoteSelected(index === 5 ? 100 : (index + 1) * 17)
+                      } // Verifica se é o sexto elemento e atribui 100, senão calcula o valor normalmente
+                      className={
+                        vipVoteSelected &&
+                        vipVoteSelected >=
+                          (index === 5 ? 100 : (index + 1) * 17)
+                          ? "text-red-500 cursor-pointer transition ease-in-out hover:scale-110 duration-300"
+                          : "hover:text-red-500 cursor-pointer transition ease-in-out hover:scale-110 duration-300"
+                      }
+                    />
+                  </div>
+                ))}
+              </div>
+
+              <button
+                className="px-4 py-2 bg-red-800 text-white rounded hover:bg-red-900 transition ease-in-out duration-300"
+                onClick={() => {
+                  handleOpenModal();
+                  handleVIPVoteSubmit();
+                }}
+              >
+                Enviar
+              </button>
+            </div>
+          </div>
+        )}
 
         {showModal && (
           <div className="fixed top-0 left-0 w-full h-full p-10 flex items-center justify-center bg-black bg-opacity-75">
