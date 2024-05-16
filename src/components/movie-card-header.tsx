@@ -20,7 +20,7 @@ export default function MovieCardHeader({ movie }: MovieCardProps) {
         <img
           src={image}
           alt={movie.title}
-          className="w-20 h-20 object-cover border-r-2"
+          className="w-0 h-0 sm:min-w-20 sm:h-20 object-cover border-r-2"
         />
         <h2 className="text-white text-lg text-center p-2 overflow-hidden whitespace-nowrap overflow-ellipsis">
           {movie.title}

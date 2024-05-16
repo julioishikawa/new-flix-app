@@ -147,9 +147,18 @@ export function FilmPlayer() {
           )}
         </div>
 
+        <h1 className="relative text-white text-center pb-4">
+          Conteúdo ilustrativo (
+          <span className="text-red-500 font-bold">
+            Cuidado! pode conter spoilers
+          </span>
+          ){" "}
+          <span className="animate-ping w-3 h-3 absolute ml-2 top-1.5 rounded-full bg-red-700 opacity-100"></span>
+        </h1>
+
         <div className="aspect-w-16 aspect-h-9">
           <iframe
-            className="w-full h-[90vh]"
+            className="w-full h-[85vh]"
             src={movie.content.URL}
             title={movie.title}
             frameBorder="0"
