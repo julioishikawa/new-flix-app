@@ -5,7 +5,8 @@ import { useAuth } from "../hooks/auth";
 import { X } from "lucide-react";
 import { toast } from "sonner";
 import { NewCreditCard } from "../components/new-credit-card";
-import { ConfirmationModal } from "../components/confirmation-modal"; // Importando o componente de modal de confirmação
+import { ConfirmationModal } from "../components/confirmation-modal";
+import QRCode from "qrcode";
 
 interface Subscription {
   id: string;
@@ -30,6 +31,10 @@ export function SubscriptionWarningPage() {
   const [selectedCreditCard, setSelectedCreditCard] = useState<any | null>(
     null
   );
+  const [pixQrCode, setPixQrCode] = useState<string | null>(null);
+  const [activePaymentMethod, setActivePaymentMethod] = useState<string | null>(
+    null
+  ); // Estado para controlar qual método de pagamento está ativo
 
   const openSub = () => {
     setSubModalOpen(true);
@@ -46,6 +51,7 @@ export function SubscriptionWarningPage() {
   const closePaymentForm = () => {
     setPaymentModalOpen(false);
     setShowCreditCards(false);
+    setActivePaymentMethod(null);
   };
 
   const openModal = () => {
@@ -77,6 +83,17 @@ export function SubscriptionWarningPage() {
     } else {
       openPaymentForm();
     }
+  };
+
+  const generatePixQrCode = () => {
+    const pixUrl = "https://github.com/shuharib0t"; // Seu link para o Pix
+    QRCode.toDataURL(pixUrl, { width: 200, margin: 2 }, (err, url) => {
+      if (err) {
+        console.error("Erro ao gerar QR Code:", err);
+      } else {
+        setPixQrCode(url);
+      }
+    });
   };
 
   function handleCardClick(cardId: string) {
@@ -243,6 +260,8 @@ export function SubscriptionWarningPage() {
                     className="text-white py-1 md:py-2 md:px-4 bg-red-800 rounded hover:bg-red-900 transition ease-in-out duration-300"
                     onClick={() => {
                       setShowCreditCards(true);
+                      setPixQrCode(null);
+                      setActivePaymentMethod("creditCard");
                     }}
                   >
                     Cartão de Crédito
@@ -251,47 +270,65 @@ export function SubscriptionWarningPage() {
                   <button
                     className="text-white py-1 md:py-2 md:px-4 bg-red-800 rounded hover:bg-red-900 transition ease-in-out duration-300"
                     onClick={() => {
-                      setShowCreditCards(true);
+                      generatePixQrCode();
+                      setShowCreditCards(false);
+                      setActivePaymentMethod("pix");
                     }}
                   >
                     Pix
                   </button>
                 </div>
 
-                {showCreditCards && userCreditCards.length > 0 ? (
-                  <ul className="p-5 border bg-neutral-700">
-                    {userCreditCards.map((card) => (
-                      <li
-                        key={card.id}
-                        onClick={() => handleCardClick(card.id)}
-                        className={`mb-4 text-lg cursor-pointer  bg-neutral-900 hover:bg-red-800 rounded p-1 ${
-                          card.selected ? "bg-red-900" : ""
-                        }`}
+                {activePaymentMethod === "creditCard" &&
+                  showCreditCards &&
+                  userCreditCards.length > 0 && (
+                    <ul className="p-5 border bg-neutral-700">
+                      {userCreditCards.map((card) => (
+                        <li
+                          key={card.id}
+                          onClick={() => handleCardClick(card.id)}
+                          className={`mb-4 text-lg cursor-pointer bg-neutral-900 hover:bg-red-800 rounded p-1 ${
+                            card.selected ? "bg-red-900" : ""
+                          }`}
+                        >
+                          **** **** **** {String(card.cardNumber).slice(-4)}
+                        </li>
+                      ))}
+
+                      <button
+                        className="text-white py-1 px-3 md:py-2 md:px-4 bg-red-800 rounded hover:bg-red-900 transition ease-in-out duration-300"
+                        onClick={openModal}
                       >
-                        **** **** **** {String(card.cardNumber).slice(-4)}
-                      </li>
-                    ))}
+                        Adicionar Cartão
+                      </button>
+                    </ul>
+                  )}
 
-                    <button
-                      className="text-white py-1 px-3 md:py-2 md:px-4 bg-red-800 rounded hover:bg-red-900 transition ease-in-out duration-300"
-                      onClick={openModal}
-                    >
-                      Adicionar Cartão
-                    </button>
-                  </ul>
-                ) : null}
+                {activePaymentMethod === "creditCard" &&
+                  showCreditCards &&
+                  userCreditCards.length === 0 && (
+                    <div className="text-center p-5 border-t">
+                      <p>
+                        Você ainda não possui cartões de crédito cadastrados.
+                      </p>
+                      <button
+                        className="text-white py-1 px-3 md:py-2 md:px-4 mt-4 bg-red-800 rounded hover:bg-red-900 transition ease-in-out hover:scale-105 duration-300"
+                        onClick={openModal}
+                      >
+                        Adicionar Cartão
+                      </button>
+                    </div>
+                  )}
 
-                {showCreditCards && userCreditCards.length === 0 ? (
-                  <div className="text-center p-5 border-t">
-                    <p>Você ainda não possui cartões de crédito cadastrados.</p>
-                    <button
-                      className="text-white py-1 px-3 md:py-2 md:px-4 mt-4 bg-red-800 rounded hover:bg-red-900 transition ease-in-out hover:scale-105 duration-300"
-                      onClick={openModal}
-                    >
-                      Adicionar Cartão
-                    </button>
+                {activePaymentMethod === "pix" && pixQrCode && (
+                  <div className="flex flex-col items-center p-5 border-t">
+                    <img src={pixQrCode} alt="Pix QR Code" />
+                    <p className="mt-3 text-white">
+                      Escaneie o QR Code com a câmera do seu celular para uma
+                      surpresa!
+                    </p>
                   </div>
-                ) : null}
+                )}
 
                 {isModalOpen && (
                   <div className="fixed top-0 left-0 px-5 w-full h-full flex justify-center items-center bg-black bg-opacity-75 z-50">

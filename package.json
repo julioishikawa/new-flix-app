@@ -16,6 +16,7 @@
     "date-fns": "^3.6.0",
     "jwt-decode": "^4.0.0",
     "lucide-react": "^0.365.0",
+    "qrcode": "^1.5.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.22.3",
@@ -26,6 +27,7 @@
   },
   "devDependencies": {
     "@types/dom-speech-recognition": "^0.0.4",
+    "@types/qrcode": "^1.5.5",
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",
     "@types/react-router-dom": "^5.3.3",
