@@ -4,6 +4,11 @@ A New Flix é uma aplicação de filmes online, onde você pode acessar, assisti
 
 Sobre a [API](https://github.com/shuharib0t/new-flix-api).
 
+## Pequena demonstração
+![Demonstração](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZHJxcDdzejFhbTA1NXRuMno3ZWd1cW56Znlya2oyd2ZocWpqMnlwcyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/DP3lcOa7j5Mb4ljDaL/giphy.gif)
+
+Para uma demonstração completa, a aplicação está online para testes [clique aqui](https://newflixtest.netlify.app).
+
 ## Funcionalidades
 
 - Criação/Atualização de usuário
@@ -34,8 +39,6 @@ Sobre a [API](https://github.com/shuharib0t/new-flix-api).
 - Swiper
 - Sonner
 - QRCode
-
-A aplicação está online para testes [clique aqui](https://newflixtest.netlify.app).
 
 ## Instalação 💡
 
