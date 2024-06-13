@@ -9,6 +9,8 @@ Sobre a [API](https://github.com/shuharib0t/new-flix-api).
 
 Para uma demonstração completa, a aplicação está online para testes [clique aqui](https://newflixtest.netlify.app).
 
+**Os deploys da aplicação foram feitos com planos gratuitos, tanto o lado do cliente/servidor, então seja paciênte na hora de fazer os testes na aplicação online.** 
+
 ## Funcionalidades
 
 - Criação/Atualização de usuário
