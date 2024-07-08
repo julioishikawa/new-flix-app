@@ -14,6 +14,7 @@ Para uma demonstração completa, a aplicação está online para testes [clique
 ## Funcionalidades
 
 - Criação/Atualização de usuário
+- Login (armazenado no localStorage)
 - Perfil do usuário com todos os dados necessários (Email/Assinatura/Cartões de créditos)
 - Seleção de assinatura
 - Formas de pagamento (Cartão de crédito/Pix)
