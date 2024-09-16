@@ -2,7 +2,7 @@
 
 A New Flix é uma aplicação de filmes online, onde você pode acessar, assistir e classificar os seus filmes preferidos. 
 
-Sobre a [API](https://github.com/shuharib0t/new-flix-api).
+Sobre a [API](https://github.com/julioishikawa/new-flix-api).
 
 ## Pequena demonstração
 ![Demonstração](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZHJxcDdzejFhbTA1NXRuMno3ZWd1cW56Znlya2oyd2ZocWpqMnlwcyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/DP3lcOa7j5Mb4ljDaL/giphy.gif)
